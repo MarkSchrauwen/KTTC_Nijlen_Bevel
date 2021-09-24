@@ -19,11 +19,11 @@ class CreateCompetitionsTable extends Migration
             $table->string('competition')->enum(["vttl","sporta"]);
             $table->string('season');
             $table->string('competition_number');
-            $table->date('competition_date');
-            $table->time('competition_time');
+            $table->date('competition_date')->nullable;
+            $table->time('competition_time')->nullable;
             $table->string('home_team');
             $table->string('visitor_team');
-            $table->bigInteger('competition_participants')->unsigned();
+            $table->bigInteger('competition_participants')->unsigned()->nullable;
             $table->timestamps();
         });
     }

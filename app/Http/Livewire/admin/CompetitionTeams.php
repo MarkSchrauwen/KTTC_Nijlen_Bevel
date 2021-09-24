@@ -79,7 +79,6 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function update(){
-        dd("Ik ben hier aangekomen");
         $this->validate();
         CompetitionTeam::find($this->modelId)->update($this->modelData());
         $this->modalFormVisible = false;
