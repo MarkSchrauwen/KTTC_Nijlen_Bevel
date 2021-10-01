@@ -47,9 +47,9 @@ Route::group(["middleware" => ['auth:sanctum','verified']], function() {
         "prefix" => 'user',
         "as" => 'user.',
     ], function(){
-        Route::get('/dashboard', function() {
-            return view('user.dashboard');
-        })->name('dashboard');
+        Route::get('/home', function() {
+            return view('user.home');
+        })->name('home');
     });
 
 });

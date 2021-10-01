@@ -2,6 +2,8 @@
 
 use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Member;
 
 return [
 
@@ -61,7 +63,17 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    'home' => function() {
+        if(auth()->user()->isAdmin) {
+            return route('admin.dashboard');
+        } else {
+            $member = Member::where('user_id',"=",auth()->user()->id)->first();
+            if(!auth()->check() || is_null($member)) {
+                return route('user.home');
+            }
+            return route('member.dashboard');
+        }
+    },
 
     /*
     |--------------------------------------------------------------------------

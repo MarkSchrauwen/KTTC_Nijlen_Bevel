@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="{{ route('admin.dashboard') }}">
-                        <x-jet-application-mark class="block h-9 w-auto" />
+                        <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="50px" class="rounded-circle">
                     </a>
                 </div>
 

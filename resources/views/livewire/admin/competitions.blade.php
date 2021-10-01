@@ -1,20 +1,30 @@
 <div class="p-6">
-    <div class="flex items-center justify-end px-4 py-3 text-right sm:px-6">
-        <div>
-            <select wire:ignore wire:model="competition_search_name" class="block w-100 text-xs appearance-none
-            bg-gray-100 border border-gray-200 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
+    <div class="flex flex-row items-center justify-end px-4 py-3 text-left sm:px-6">
+        <div class="m-2">
+            <label class="text-sm">{{ __('Start date') }}</label>
+            <x-date-picker wire:model="start_date" class="border-gray-300 text-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"/>
+        </div>
+        <div class="m-2">
+            <label class="text-sm">{{ __('End date') }}</label>
+            <x-date-picker wire:model="end_date" class="border-gray-300 text-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"/>
+        </div>
+        <div class="m-2">
+            <label class="text-sm">{{ __('Organisations') }}</label>
+            <select wire:ignore wire:model="competition_search_name" class="block w-100 text-sm appearance-none
+            bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
             focus:outline-none focus:bg-white focus:border-gray-500">
-                <option value="">{{ __('all competitions') }}</option>
+            <option value="">{{ __('All') }}</option>
                 @foreach($competition_names as $item)
                     <option value="{{ $item->name }}">{{ $item->name }}</option>
                 @endforeach
             </select>
         </div>
-        <div>
-            <select wire:ignore wire:model="team_search_name" class="block w-100 text-xs appearance-none 
-            bg-gray-100 border border-gray-200 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
+        <div class="m-2">
+            <label class="text-sm">{{ __('Teams') }}</label>
+            <select wire:ignore wire:model="team_search_name" class="block w-full text-sm appearance-none 
+            bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
             focus:outline-none focus:bg-white focus:border-gray-500">
-                <option value="">{{ __('all teams') }}</option>
+            <option value="">{{ __('All') }}</option>
                 @foreach($team_names as $item)
                     <option value="{{ $item->name }}">{{ $item->name }}</option>
                 @endforeach

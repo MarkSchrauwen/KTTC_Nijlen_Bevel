@@ -18,7 +18,7 @@ class LoginResponse implements LoginResponseContract
         } elseif ($isMember != null) {
             $redirect = 'member/dashboard';
         } else {
-            $redirect = 'user/dashboard';
+            $redirect = 'user/home';
         }
 
         return $request->wantsJson()
