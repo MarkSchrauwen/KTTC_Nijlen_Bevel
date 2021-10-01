@@ -171,7 +171,8 @@ class Competitions extends Component
     */
     public function read(){
         if(empty($this->startDateSearch) && empty($this->endDateSearch)) {
-            $records = Competition::where('team_name','LIKE','%'.$this->teamSearch.'%')
+            $records = Competition::orderBy('competition_date','Asc')
+                ->where('team_name','LIKE','%'.$this->teamSearch.'%')
                 ->where('competition',"LIKE",'%'.$this->competitionSearch.'%')
                 ->where('season',"LIKE",'%'.$this->seasonSearch.'%')
                 ->where('home_team',"LIKE",'%'.$this->homeSearch.'%')
@@ -179,32 +180,35 @@ class Competitions extends Component
                 ->with('members')
                 ->paginate(11);            
         } else if(empty($this->startDateSearch)) {
-            $records = Competition::where('team_name','LIKE','%'.$this->teamSearch.'%')
-            ->where('competition',"LIKE",'%'.$this->competitionSearch.'%')
-            ->where('season',"LIKE",'%'.$this->seasonSearch.'%')
-            ->where('home_team',"LIKE",'%'.$this->homeSearch.'%')
-            ->where('visitor_team',"LIKE",'%'.$this->visitorSearch.'%')
-            ->where('competition_date',"<=", $this->endDateSearch)
-            ->with('members')
-            ->paginate(11);
+            $records = Competition::orderBy('competition_date','Asc')
+                ->where('team_name','LIKE','%'.$this->teamSearch.'%')
+                ->where('competition',"LIKE",'%'.$this->competitionSearch.'%')
+                ->where('season',"LIKE",'%'.$this->seasonSearch.'%')
+                ->where('home_team',"LIKE",'%'.$this->homeSearch.'%')
+                ->where('visitor_team',"LIKE",'%'.$this->visitorSearch.'%')
+                ->where('competition_date',"<=", $this->endDateSearch)
+                ->with('members')
+                ->paginate(11);
         } else if(empty($this->endDateSearch)) {
-            $records = Competition::where('team_name','LIKE','%'.$this->teamSearch.'%')
-            ->where('competition',"LIKE",'%'.$this->competitionSearch.'%')
-            ->where('season',"LIKE",'%'.$this->seasonSearch.'%')
-            ->where('home_team',"LIKE",'%'.$this->homeSearch.'%')
-            ->where('visitor_team',"LIKE",'%'.$this->visitorSearch.'%')
-            ->where('competition_date',">=", $this->startDateSearch)
-            ->with('members')
-            ->paginate(11);
+            $records = Competition::orderBy('competition_date','Asc')
+                ->where('team_name','LIKE','%'.$this->teamSearch.'%')
+                ->where('competition',"LIKE",'%'.$this->competitionSearch.'%')
+                ->where('season',"LIKE",'%'.$this->seasonSearch.'%')
+                ->where('home_team',"LIKE",'%'.$this->homeSearch.'%')
+                ->where('visitor_team',"LIKE",'%'.$this->visitorSearch.'%')
+                ->where('competition_date',">=", $this->startDateSearch)
+                ->with('members')
+                ->paginate(11);
         } else {
-            $records = Competition::where('team_name','LIKE','%'.$this->teamSearch.'%')
-            ->where('competition',"LIKE",'%'.$this->competitionSearch.'%')
-            ->where('season',"LIKE",'%'.$this->seasonSearch.'%')
-            ->where('home_team',"LIKE",'%'.$this->homeSearch.'%')
-            ->where('visitor_team',"LIKE",'%'.$this->visitorSearch.'%')
-            ->whereBetween('competition_date', [$this->startDateSearch,$this->endDateSearch])
-            ->with('members')
-            ->paginate(11);
+            $records = Competition::orderBy('competition_date','Asc')
+                ->where('team_name','LIKE','%'.$this->teamSearch.'%')
+                ->where('competition',"LIKE",'%'.$this->competitionSearch.'%')
+                ->where('season',"LIKE",'%'.$this->seasonSearch.'%')
+                ->where('home_team',"LIKE",'%'.$this->homeSearch.'%')
+                ->where('visitor_team',"LIKE",'%'.$this->visitorSearch.'%')
+                ->whereBetween('competition_date', [$this->startDateSearch,$this->endDateSearch])
+                ->with('members')
+                ->paginate(11);
         }
 
         return $records;
