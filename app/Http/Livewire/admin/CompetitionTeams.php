@@ -5,10 +5,12 @@ namespace App\Http\Livewire\Admin;
 use App\Models\CompetitionTeam;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CompetitionTeams extends Component
 {
     use WithPagination;
+    use AuthorizesRequests;
 
     public $modalFormVisible;
     public $modalConfirmDeleteVisible;
@@ -58,6 +60,7 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function create(){
+        $this->authorize('create',CompetitionTeam::class);
         $this->validate();
         CompetitionTeam::create($this->modelData());
         $this->modalFormVisible = false;
@@ -70,6 +73,7 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function read(){
+        $this->authorize('viewAny',CompetitionTeam::class);
         return CompetitionTeam::paginate(5);
     }
 
@@ -79,6 +83,7 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function update(){
+        $this->authorize('update',CompetitionTeam::class);
         $this->validate();
         CompetitionTeam::find($this->modelId)->update($this->modelData());
         $this->modalFormVisible = false;
@@ -90,6 +95,7 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function delete(){
+        $this->authorize('delete',CompetitionTeam::class);
         CompetitionTeam::destroy($this->modelId);
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();

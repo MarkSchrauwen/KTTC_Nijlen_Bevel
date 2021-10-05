@@ -258,7 +258,7 @@ class Competitions extends Component
     */
     public function updateShowModal($id){
         $this->resetValidation();
-        $this->reset();
+        $this->resetOnlyLivewireVariables();
         $this->modelId = $id;
         $this->modalFormVisible = true;
         $this->loadModel();

@@ -5,10 +5,12 @@ namespace App\Http\Livewire\Admin;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Users extends Component
 {
     use WithPagination;
+    use AuthorizesRequests;
 
     // Modal variables
     public $modalConfirmDeleteVisible = false;
@@ -27,10 +29,12 @@ class Users extends Component
     }
 
     public function read() {
+        $this->authorize('view',User::class);
         return User::select('id','firstname','lastname','email')->paginate(5);
     }
 
     public function delete() {
+        $this->authorize('delete',User::class);
         User::destroy($this->modelId);
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();

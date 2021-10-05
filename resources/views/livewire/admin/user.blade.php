@@ -29,7 +29,9 @@
                                         <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->firstname }}</td>
                                         <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->lastname }}</td>
                                         <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->email }}</td>
+                                        @can('delete',App\Models\User::class)
                                         <td><x-jet-danger-button wire:click="deleteShowModal({{ $item->id }})">{{ __('Delete') }}</x-jet-button></td>                                
+                                        @endcan
                                     </tr>
                                 @endforeach
                             @endif

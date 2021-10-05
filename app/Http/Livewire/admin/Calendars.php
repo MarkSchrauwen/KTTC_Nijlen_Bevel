@@ -11,9 +11,12 @@ use App\Models\CompetitionTeam;
 use Excel;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Calendars extends Component
 {
+    use AuthorizesRequests;
+
     public $competitions = null;
     public $selectedCompetitionOrganisation;
     public $selectedSeason;
@@ -31,6 +34,7 @@ class Calendars extends Component
     public $calendarSportaUrl = "https://ttonline.sporta.be/kalenders";
 
     public function saveCompetition() {
+        $this->authorize('create',Calendars::class);
             foreach($this->competitions as $competition) {
                 Competition::create([
                     "team_name" => $this->selectedTeam,
@@ -166,6 +170,7 @@ class Calendars extends Component
     }
 
     public function getCompetitionTeams() {
+        $this->authorize('viewAny',CompetitionTeam::class);
         return CompetitionTeam::all();
     }
 

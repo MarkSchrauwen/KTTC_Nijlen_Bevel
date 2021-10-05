@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Competition;
+use App\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CompetitionPolicy
@@ -11,15 +12,15 @@ class CompetitionPolicy
     use HandlesAuthorization;
 
     public function create(User $user) {
-        return $user->isAdmin;
+        return in_array($user->role_id,[Role::isSiteAdmin]);
     }
 
-    public function update(User $user, Competition $competition) {
-        return $user->isAdmin;
+    public function update(User $user) {
+        return in_array($user->role_id,[Role::isSiteAdmin,Role::isContentManager,Role::isBlogModerator,Role::isTeamCaptain]);
     }
 
     public function delete(User $user, Competition $competition) {
-        return $user->isAdmin;
+        return in_Array($user->role_id,[Role::isSiteAdmin]);
     }
 
     /**

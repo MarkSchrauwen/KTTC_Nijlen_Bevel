@@ -15,21 +15,29 @@
                     <x-jet-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('admin.users') }}" :active="request()->routeIs('admin.users')">
-                        {{ __('Users') }}
-                    </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('admin.members') }}" :active="request()->routeIs('admin.members')">
-                        {{ __('Members') }}
-                    </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('admin.competition-teams') }}" :active="request()->routeIs('admin.competition-teams')">
-                        {{ __('Competition Teams') }}
-                    </x-jet-nav-link>
+                    @can('view',App\Models\User::class)
+                        <x-jet-nav-link href="{{ route('admin.users') }}" :active="request()->routeIs('admin.users')">
+                            {{ __('Users') }}
+                        </x-jet-nav-link>
+                    @endcan
+                    @can('view',App\Models\Member::class)
+                        <x-jet-nav-link href="{{ route('admin.members') }}" :active="request()->routeIs('admin.members')">
+                            {{ __('Members') }}
+                        </x-jet-nav-link>
+                    @endcan
+                    @can('view', App\Models\CompetitionTeam::class)
+                        <x-jet-nav-link href="{{ route('admin.competition-teams') }}" :active="request()->routeIs('admin.competition-teams')">
+                            {{ __('Competition Teams') }}
+                        </x-jet-nav-link>
+                    @endcan
                     <x-jet-nav-link href="{{ route('admin.competitions') }}" :active="request()->routeIs('admin.competitions')">
                         {{ __('Competitions') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('admin.calendars') }}" :active="request()->routeIs('admin.calendars')">
-                        {{ __('Calendars') }}
-                    </x-jet-nav-link>
+                    @can('view',App\Models\Calendar::class)
+                        <x-jet-nav-link href="{{ route('admin.calendars') }}" :active="request()->routeIs('admin.calendars')">
+                            {{ __('Calendars') }}
+                        </x-jet-nav-link>
+                    @endcan
                 </div>
             </div>
 

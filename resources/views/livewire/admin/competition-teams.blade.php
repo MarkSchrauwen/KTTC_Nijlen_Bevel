@@ -1,8 +1,10 @@
 <div class="p-6">
     <div class="flex items-center justify-end px-4 py-3 text-right sm:px-6">
-        <x-jet-button wire:click="createShowModal">
-            {{ __('Create') }}
-        </x-jet-button>
+        @can('create',App\Models\CompetitionTeam::class)
+            <x-jet-button wire:click="createShowModal">
+                {{ __('Create') }}
+            </x-jet-button>
+        @endcan
     </div>
 
     {{-- The data table --}}
@@ -23,12 +25,16 @@
                                     <tr>
                                         <td class="px-6 py-2">{{ $item->name }}</td>
                                         <td class="px-6 py-2 flex justify-end">
-                                            <x-jet-button wire:click="updateShowModal({{ $item->id }})">
-                                                {{ __('Update') }}
-                                            </x-jet-button>
-                                            <x-jet-danger-button class="ml-2" wire:click="deleteShowModal({{ $item->id }})">
-                                                {{ __('Delete') }}
-                                            </x-jet-button>
+                                            @can('update',App\Models\CompetitionTeam::class)
+                                                <x-jet-button wire:click="updateShowModal({{ $item->id }})">
+                                                    {{ __('Update') }}
+                                                </x-jet-button>
+                                            @endcan
+                                            @can('delete',App\Models\CompetitionTeam::class)
+                                                <x-jet-danger-button class="ml-2" wire:click="deleteShowModal({{ $item->id }})">
+                                                    {{ __('Delete') }}
+                                                </x-jet-button>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

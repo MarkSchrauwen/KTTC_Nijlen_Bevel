@@ -9,10 +9,13 @@ use App\Models\Member;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class Competitions extends Component
 {
     use WithPagination;
+    use AuthorizesRequests;
 
     public $modalFormVisible;
     public $modalConfirmDeleteVisible;
@@ -141,16 +144,24 @@ class Competitions extends Component
         $this->all_members = Member::all();
     }
 
+    public function resetOnlyLivewireVariables() {
+        $this->reset();
+        $this->getCompetitionNames();
+        $this->getTeamNames();
+        $this->getMembers();
+    }
+
     /**
     * The create function
     *
     * @return void
     */
-    public function create(){
+    public function create(Request $request){
+        $this->authorize('create',Competition::class);
         $this->validate();
-        Competition::create($this->modelData());
+        Competition::create($this->modelData())->members()->sync($this->participants);;
         $this->modalFormVisible = false;
-        $this->reset();
+        $this->resetOnlyLivewireVariables();
     }
 
     /**
@@ -208,7 +219,8 @@ class Competitions extends Component
     *
     * @return void
     */
-    public function update(){
+    public function update(Competition $competition){
+        $this->authorize('update', $competition);
         $this->validate();
         Competition::find($this->modelId)->update($this->modelData());
         Competition::find($this->modelId)->members()->sync($this->participants);
@@ -220,7 +232,8 @@ class Competitions extends Component
     *
     * @return void
     */
-    public function delete(){
+    public function delete(Competition $competition){
+        $this->authorize('delete', $competition);
         Competition::destroy($this->modelId);
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();
@@ -233,7 +246,7 @@ class Competitions extends Component
     */
     public function createShowModal(){
         $this->resetValidation();
-        $this->reset();
+        $this->resetOnlyLivewireVariables();
         $this->modalFormVisible = true;
     }
 
@@ -244,7 +257,7 @@ class Competitions extends Component
     */
     public function updateShowModal($id){
         $this->resetValidation();
-        $this->reset();
+        $this->resetOnlyLivewireVariables();
         $this->modelId = $id;
         $this->modalFormVisible = true;
         $this->loadModel();

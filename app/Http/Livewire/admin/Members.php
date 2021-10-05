@@ -6,10 +6,12 @@ use App\Models\Member;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Members extends Component
 {
     use WithPagination;
+    use AuthorizesRequests;
 
     public $modalFormVisible;
     public $modalConfirmDeleteVisible;
@@ -85,6 +87,7 @@ class Members extends Component
     * @return void
     */
     public function create(){
+        $this->authorize('create',Member::class);
         $this->validate();
         Member::create($this->modelData());
         $this->modalFormVisible = false;
@@ -97,6 +100,7 @@ class Members extends Component
     * @return void
     */
     public function read(){
+        $this->authorize('view',Member::class);
         return Member::paginate(5);
     }
 
@@ -106,6 +110,7 @@ class Members extends Component
     * @return void
     */
     public function update(){
+        $this->authorize('update',Member::class);
         $this->validate();
         Member::find($this->modelId)->update($this->modelData());
         $this->modalFormVisible = false;
@@ -117,6 +122,7 @@ class Members extends Component
     * @return void
     */
     public function delete(){
+        $this->authorize('delete',Member::class);
         Member::destroy($this->modelId);
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();
