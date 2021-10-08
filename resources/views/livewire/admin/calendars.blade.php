@@ -20,7 +20,6 @@
             @endforeach
         @endif     
     </select>
-    <p>{{ $selectedLevel }}</p>
 
     <select class="form-control" wire:model="selectedClub">
         <option value="">{{ __('-- Select Club --') }}</option>
@@ -30,7 +29,6 @@
             @endforeach
         @endif      
     </select>
-    <p>{{ $selectedClub }}</p>
     <br>
 
     <select class="form-control" wire:model="selectedDivision">
@@ -41,7 +39,6 @@
             @endforeach
         @endif      
     </select>
-    <p>{{ $selectedDivision }}</p>
     <br>
 
     <label for="club">Enter exact Club Name (eg. Nijlen A)</label>

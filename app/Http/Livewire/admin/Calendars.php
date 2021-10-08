@@ -34,7 +34,7 @@ class Calendars extends Component
     public $calendarSportaUrl = "https://ttonline.sporta.be/kalenders";
 
     public function saveCompetition() {
-        $this->authorize('create',Calendars::class);
+        $this->authorize('create',Competition::class);
             foreach($this->competitions as $competition) {
                 Competition::create([
                     "team_name" => $this->selectedTeam,
@@ -44,10 +44,9 @@ class Calendars extends Component
                     "competition_date" => $competition[1],
                     "competition_time" => $competition[4],
                     "home_team" => $competition[2],
-                    "visitor_team" => $competition[3], 
+                    "visitor_team" => $competition[3],
                 ]);
             }           
-
         $this->reset();
     }
 
@@ -243,9 +242,6 @@ class Calendars extends Component
         }
         }
         return null;
-
-
-
     }
 
     public function getCalendarSporta(){

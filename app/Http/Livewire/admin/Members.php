@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Member;
+use App\Models\Role;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -21,6 +22,7 @@ class Members extends Component
     * Put your custom public properties here!
     */
     public $user_id;
+    public $old_user_id;
     public $name;
     public $email;
     public $address;
@@ -52,6 +54,7 @@ class Members extends Component
         $data = Member::find($this->modelId);
         // Assign the variables here
         $this->user_id = $data->user_id;
+        $this->old_user_id = $data->user_id;
         $this->name = $data->name;
         $this->email = $data->email;
         $this->address = $data->address;
@@ -81,6 +84,13 @@ class Members extends Component
         ];
     }
 
+    public function resetOnlyLivewireVariables() {
+        $this->reset();
+        $this->getCompetitionNames();
+        $this->getTeamNames();
+        $this->getMembers();
+    }
+
     /**
     * The create function
     *
@@ -89,7 +99,18 @@ class Members extends Component
     public function create(){
         $this->authorize('create',Member::class);
         $this->validate();
-        Member::create($this->modelData());
+        // we need to check if selected to connect user is already connected or not
+        $member = Member::where('user_id',$this->user_id)->first();
+        if($this->user_id != null && $member != null) {
+            session()->flash('memberError','You are not allowed to connect a user that is already linked to another member !');
+        } else {
+            Member::create($this->modelData());
+            // if user was chosen to connect then set role to Member
+            if($this->user_id != null) {
+                User::find($this->user_id)->update(["isAdmin" => "0", "role_id" => Role::isMember]);                
+            }
+            session()->flash('memberSuccess','You succesfully created a new member !');           
+        }
         $this->modalFormVisible = false;
         $this->reset();
     }
@@ -101,7 +122,7 @@ class Members extends Component
     */
     public function read(){
         $this->authorize('view',Member::class);
-        return Member::paginate(5);
+        return Member::paginate(11);
     }
 
     /**
@@ -112,7 +133,47 @@ class Members extends Component
     public function update(){
         $this->authorize('update',Member::class);
         $this->validate();
-        Member::find($this->modelId)->update($this->modelData());
+        // we have to check if selected user to connect
+        // 1) has changed and if so 
+        // 2) we need to eliminate that user can change his own connected user
+        // 3) then we need to check if user isn't already connected
+        // then we need to reset isAdmin to 0 and role to isUser
+        if($this->user_id == $this->old_user_id) {
+            Member::find($this->modelId)->update($this->modelData());
+            session()->flash("memberSuccess","You have succesfully updated a member !");
+        } else {
+            if($this->old_user_id == auth()->user()->id) {
+                session()->flash("memberError","You can't link another User for yourself !");
+            } else {
+                // if no User was selected then we update member and
+                // and set role of old user to User
+                if($this->user_id == "" || $this->user_id == null) {
+                    $this->user_id = null;
+                    Member::find($this->modelId)->update($this->modelData());
+                    if($this->old_user_id != null || $this->old_user_id != null) {
+                        User::find($this->old_user_id)->update(["isAdmin" => "0", "role_id" => Role::isUser]);
+                    }
+                    $this->old_user_id = $this->user_id;
+                    session()->flash("userSuccess","You have successfully updated a member !");
+                } else {
+                    $member = Member::where('user_id',$this->user_id)->first();
+                    if($member != null) {
+                        session()->flash("memberError","chosen User to connect is already linked to another User !");
+                    } else {
+                        // update Member and
+                        // 1- update role of connected User to Member
+                        // 2- update role of old connected User to User
+                        Member::find($this->modelId)->update($this->modelData());
+                        User::find($this->user_id)->update(["isAdmin" => "0", "role_id" => Role::isMember]);
+                        if($this->old_user_id != null || $this->old_user_id != null) {
+                            User::find($this->old_user_id)->update(["isAdmin" => "0", "role_id" => Role::isUser]);
+                        }
+                        $this->old_user_id = $this->user_id;
+                        session()->flash("userSuccess","You have successfully updated a member !");
+                    }                    
+                }               
+            }
+        }        
         $this->modalFormVisible = false;
     }
 
@@ -123,7 +184,20 @@ class Members extends Component
     */
     public function delete(){
         $this->authorize('delete',Member::class);
-        Member::destroy($this->modelId);
+        
+        $memberUserId = Member::find($this->modelId)->user_id;
+        // don't allow Admin to delete his own membership
+        if($memberUserId == auth()->user()->id) {
+            session()->flash("memberError","You can't delete your own membership !");
+        } else {
+            // delete Member and change user(isAdmin to 0, role_id to 1)
+            if(Member::find($this->modelId)->user_id) {
+                $userId = Member::find($this->modelId)->user_id;
+                User::find($userId)->update(["isAdmin" => "0", "role_id" => Role::isUser]);
+            }
+            Member::destroy($this->modelId);            
+        }
+
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();
     }
@@ -167,7 +241,7 @@ class Members extends Component
      *
      * @return void
      */
-    public function allUsers() {
+    public function getUsers() {
         return User::select('id', 'firstname', 'lastname')->get();
     }
 
@@ -180,7 +254,7 @@ class Members extends Component
     {
         return view('livewire.admin.members',[
             'data' => $this->read(),
-            'users' => $this->allUsers(),
+            'users' => $this->getUsers(),
         ]);
     }
 }

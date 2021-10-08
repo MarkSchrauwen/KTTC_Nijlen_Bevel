@@ -65,7 +65,6 @@ class Competitions extends Component
             "competition_time" => 'required',
             "home_team" => 'required',
             "visitor_team" => 'required',
-            "participants" => 'required',
         ];
     }
 

@@ -12,6 +12,7 @@ use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Member;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -28,7 +29,7 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'firstname', 'lastname', 'email', 'password','isAdmin','role_id',
+        'firstname', 'lastname', 'email', 'password','isAdmin','role_id'
     ];
 
     /**
@@ -63,6 +64,10 @@ class User extends Authenticatable
 
     public function member() {
         return $this->hasOne(Member::class);
+    }
+
+    public function role() {
+        return $this->belongsTo(Role::class);
     }
 
 }

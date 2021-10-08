@@ -25,7 +25,7 @@ class CreateMembersTable extends Migration
             $table->string('mobile')->nullable();
             $table->date('birthdate')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

@@ -109,7 +109,7 @@
                 <select wire:model="user_id" id="user_id" class="block appearance-none w-full 
                 bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 round leading-tight 
                 focus:outline-none focus:bg-white focus:border-gray-500">
-                <option value="">-- Select a User --</option>
+                <option value="">{{ __('-- No User selected --') }}</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}">{{ $user->firstname . ' ' . $user->lastname }}</option>
                 @endforeach
@@ -138,11 +138,11 @@
     <x-jet-dialog-modal wire:model="modalConfirmDeleteVisible">
 
         <x-slot name="title">
-            {{ __('Delete Navigation Item') }}
+            {{ __('Delete Member') }}
         </x-slot>
 
         <x-slot name="content">
-            {{ __('Are you sure you want to delete this navigation item?') }}
+            {{ __('Are you sure you want to delete this member?') }}
         </x-slot>
 
         <x-slot name="footer">
@@ -151,9 +151,18 @@
             </x-jet-secondary-button>
 
             <x-jet-danger-button class="ml-2" wire:click="delete" wire:loading.attr="disabled">
-                {{ __('Delete Navigation Item') }}
+                {{ __('Delete Member') }}
             </x-jet-danger-button>
         </x-slot>
     </x-jet-dialog-modal>
-
+    @if(Session::has('memberError'))
+        <script>
+            toastr.error("{!! Session::get('memberError') !!}");
+        </script>
+    @endif
+    @if(Session::has('memberSuccess'))
+    <script>
+        toastr.success("{!! Session::get('memberSuccess') !!}");
+    </script>
+@endif
 </div>
