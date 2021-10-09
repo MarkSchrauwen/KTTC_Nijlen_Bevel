@@ -44,11 +44,11 @@ class Competitions extends Component
     public $homeSearch = "";
     public $visitorSearch = "";
     public $competition_names;
-    public $competition_search_name;
+    public $competition_search_name = "";
     public $team_names;
-    public $team_search_name;
-    public $start_date;
-    public $end_date;
+    public $team_search_name = "";
+    public $start_date = "";
+    public $end_date = "";
     public $all_members;
 
     /**
