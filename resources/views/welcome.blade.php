@@ -56,8 +56,9 @@
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
                     <div class="flex-shrink-0 flex items-center">
+                        <!-- Logo -->
                         <a href="{{ route('user.home') }}">
-                            <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="100px" class="rounded-circle">
+                            <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="150px" class="rounded-circle">
                         </a>
                     </div>
                 </div>
@@ -72,7 +73,12 @@
 
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Gelieve u voor alle info te wenden tot de website van <a href="https://kttcnijlen-bevel.org/" class="text-primary">KTTC Nijlen-Bevel</a>. De website waarop u zich nu bevindt, is onder constructie en bevat voorlopig enkel informatie voor aangesloten leden ! 
+                                    <p>
+                                        Gelieve u voor alle info te wenden tot de website van <a href="https://kttcnijlen-bevel.org/" class="underline text-primary">KTTC Nijlen-Bevel</a>. De website waarop u zich nu bevindt, is onder constructie en bevat voorlopig enkel informatie voor aangesloten leden !
+                                    </p><br>
+                                    <p>
+                                        Als u lid bent van KTTC Nijlen-Bevel, kan u verder gebruik maken van functionaliteiten door te registeren (rechts bovenaan). U dient bij de registratie ook aan te vragen om uw 'user-identificatie' te koppelen aan uw lidmaatschap van de club. Vergeet dit niet !
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -80,12 +86,19 @@
                         <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
                             <div class="flex items-center">
                                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="{{ route('register') }}" class="underline text-gray-900 dark:text-white">Toegang met registratie</a></div>
+                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="{{ route('register') }}" class="underline text-gray-900 dark:text-white">Bestuur ter info</a></div>
                             </div>
 
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Als u lid bent van KTTC Nijlen-Bevel, kan u verder gebruik maken van functionaliteiten door te registeren (rechts bovenaan). U dient bij de registratie ook aan te vragen om uw 'user-identificatie' te koppelen aan uw lidmaatschap van de club. Vergeet dit niet !
+                                    @php
+                                        $boardMembers = App\Models\BoardMember::all();
+                                    @endphp
+                                     <p>
+                                        @foreach($boardMembers as $member)
+                                            <b>{{ $member->name }}</b> ({{ $member->title }}), {{ $member->address }}, {{ $member->postcode }}    {{ $member->city }}<br>
+                                        @endforeach
+                                    </p> 
                                 </div>
                             </div>
                         </div>

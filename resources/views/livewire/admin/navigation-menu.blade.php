@@ -25,6 +25,11 @@
                             {{ __('Members') }}
                         </x-jet-nav-link>
                     @endcan
+                    @can('view',App\Models\BoardMember::class)
+                    <x-jet-nav-link href="{{ route('admin.board-members') }}" :active="request()->routeIs('admin.board-members')">
+                        {{ __('Board Members') }}
+                    </x-jet-nav-link>
+                @endcan
                     @can('view', App\Models\CompetitionTeam::class)
                         <x-jet-nav-link href="{{ route('admin.competition-teams') }}" :active="request()->routeIs('admin.competition-teams')">
                             {{ __('Competition Teams') }}
@@ -120,6 +125,9 @@
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('admin.members') }}" :active="request()->routeIs('admin.members')">
                 {{ __('Members') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('admin.board-members') }}" :active="request()->routeIs('admin.board-members')">
+                {{ __('Board-Members') }}
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('admin.competition-teams') }}" :active="request()->routeIs('admin.competition-teams')">
                 {{ __('Competition Teams') }}

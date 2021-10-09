@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\CompetitionTeam;
+use App\Models\BoardMember;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class CompetitionTeams extends Component
+class BoardMembers extends Component
 {
     use WithPagination;
     use AuthorizesRequests;
@@ -20,6 +20,12 @@ class CompetitionTeams extends Component
     * Put your custom public properties here!
     */
     public $name;
+    public $title;
+    public $address;
+    public $postcode;
+    public $city;
+    public $phone;
+    public $mobile;
 
     /**
     * Validation rules
@@ -28,7 +34,8 @@ class CompetitionTeams extends Component
     */
     public function rules(){
         return [
-            "name" => 'required',
+            "name" => "required",
+            "title" => "required",
         ];
     }
 
@@ -38,9 +45,14 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function loadModel(){
-        $data = CompetitionTeam::find($this->modelId);
-        // Assign the variables here
+        $data = BoardMember::find($this->modelId);
         $this->name = $data->name;
+        $this->title = $data->title;
+        $this->address = $data->address;
+        $this->postcode = $data->postcode;
+        $this->city = $data->city;
+        $this->phone = $data->phone;
+        $this->mobile = $data->mobile;
     }
 
     /**
@@ -51,6 +63,12 @@ class CompetitionTeams extends Component
     public function modelData(){
         return [
             "name" => $this->name,
+            "title" => $this->title,
+            "address" => $this->address,
+            "postcode" => $this->postcode,
+            "city" => $this->city,
+            "phone" => $this->phone,
+            "mobile" => $this->mobile,
         ];
     }
 
@@ -60,9 +78,9 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function create(){
-        $this->authorize('create',CompetitionTeam::class);
+        $this->authorize('create',BoardMember::class);
         $this->validate();
-        CompetitionTeam::create($this->modelData());
+        BoardMember::create($this->modelData());
         $this->modalFormVisible = false;
         $this->reset();
     }
@@ -73,8 +91,8 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function read(){
-        $this->authorize('viewAny',CompetitionTeam::class);
-        return CompetitionTeam::paginate(11);
+        $this->authorize('viewAny',BoardMember::class);
+        return BoardMember::paginate(11);
     }
 
     /**
@@ -83,9 +101,9 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function update(){
-        $this->authorize('update',CompetitionTeam::class);
+        $this->authorize('update',BoardMember::class);
         $this->validate();
-        CompetitionTeam::find($this->modelId)->update($this->modelData());
+        BoardMember::find($this->modelId)->update($this->modelData());
         $this->modalFormVisible = false;
     }
 
@@ -95,8 +113,8 @@ class CompetitionTeams extends Component
     * @return void
     */
     public function delete(){
-        $this->authorize('delete',CompetitionTeam::class);
-        CompetitionTeam::destroy($this->modelId);
+        $this->authorize('delete',BoardMember::class);
+        BoardMember::destroy($this->modelId);
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();
     }
@@ -142,7 +160,7 @@ class CompetitionTeams extends Component
     */
     public function render()
     {
-        return view('livewire.admin.competition-teams',[
+        return view('livewire.admin.board-members',[
             'data' => $this->read(),
         ]);
     }

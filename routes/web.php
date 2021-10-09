@@ -29,6 +29,7 @@ Route::group(["middleware" => ['auth:sanctum','verified']], function() {
         Route::get('/dashboard', function() {return view('admin.dashboard');})->name('dashboard');
         Route::get('/users', function () {return view('admin.user');})->name('users');
         Route::get('/members', function () {return view('admin.members');})->name('members');
+        Route::get('/board-members', function () {return view('admin.board-members');})->name('board-members');
         Route::get('/competition-teams', function () {return view('admin.competition-teams');})->name('competition-teams');
         Route::get('/competitions', function () {return view('admin.competitions');})->name('competitions');
         Route::get('/calendars', function () {return view('admin.calendars');})->name('calendars');
