@@ -9,7 +9,7 @@
             <x-date-picker wire:model="end_date" class="border-gray-300 text-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"/>
         </div>
         <div class="m-2">
-            <label class="text-sm">{{ __('Organisations') }}</label>
+            <label class="text-sm">{{ __('Organisation') }}</label>
             <select wire:ignore wire:model="competition_search_name" class="block w-100 text-sm appearance-none
             bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
             focus:outline-none focus:bg-white focus:border-gray-500">
@@ -52,8 +52,8 @@
 
                                 <th class="w-2/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Date') }}</th>
                                 <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Time') }}</th>
-                                <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Home') }}</th>
-                                <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Visitor') }}</th>
+                                <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Home Team') }}</th>
+                                <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Visitor Team') }}</th>
                                 <th class="w-5/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Participants') }}</th>
                                 <th class="px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"></th>
                             </tr>
@@ -95,7 +95,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td class="px-6 py-4 text-sm withespace-no-wrap" colspan="4">{{ __('No results found') }}</td>
+                                    <td class="px-6 py-4 text-sm withespace-no-wrap" colspan="4">{{ __('No Results Found') }}</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -143,7 +143,7 @@
                     @error('team_name') <span class="error">{{ $message }}</span> @enderror
                 </div>
                 <div class="mt-4 mx-4 justify-items-center">
-                    <x-jet-label for="season" value="{{ __('Season (eg. 2019-2020)') }}" />
+                    <x-jet-label for="season" value="{{ __('Season') }} (yyyy-yyyy)" />
                     <x-jet-input wire:model="season" id="season" class="block mt-1 w-full" type="text" />
                     @error('season') <span class="error">{{ $message }}</span> @enderror
                 </div>

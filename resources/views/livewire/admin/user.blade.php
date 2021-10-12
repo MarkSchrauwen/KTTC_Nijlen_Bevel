@@ -153,7 +153,7 @@
     <x-jet-dialog-modal wire:model="modalConfirmDeleteVisible">
 
         <x-slot name="title">
-            {{ __('Delete Page') }}
+            {{ __('Delete User') }}
         </x-slot>
 
         <x-slot name="content">

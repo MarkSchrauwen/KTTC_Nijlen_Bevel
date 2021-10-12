@@ -46,7 +46,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td class="px-6 py-4 text-sm withespace-no-wrap" colspan="4">{{ __('No results found') }}</td>
+                                    <td class="px-6 py-4 text-sm withespace-no-wrap" colspan="4">{{ __('No Results Found') }}</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -70,33 +70,33 @@
 
         <x-slot name="content">
             <div class="mt-4">
-                <x-jet-label for="name" value="{{ __('name') }}" />
+                <x-jet-label for="name" value="{{ __('Name') }}" />
                 <x-jet-input wire:model="name" id="name" class="block mt-1 w-full" type="text" />
                 @error('name') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="mt-4">
-                <x-jet-label for="title" value="{{ __('title') }}" />
+                <x-jet-label for="title" value="{{ __('Title') }}" />
                 <x-jet-input wire:model="title" id="title" class="block mt-1 w-full" type="text" />
                 @error('title') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="mt-4">
-                <x-jet-label for="address" value="{{ __('address') }}" />
+                <x-jet-label for="address" value="{{ __('Address') }}" />
                 <x-jet-input wire:model="address" id="address" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="postcode" value="{{ __('postcode') }}" />
+                <x-jet-label for="postcode" value="{{ __('Postal Code') }}" />
                 <x-jet-input wire:model="postcode" id="postcode" class="block mt-1 w-full" type="text" />
             </div>           
             <div class="mt-4">
-                <x-jet-label for="city" value="{{ __('city') }}" />
+                <x-jet-label for="city" value="{{ __('City') }}" />
                 <x-jet-input wire:model="city" id="city" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="phone" value="{{ __('phone') }}" />
+                <x-jet-label for="phone" value="{{ __('Phone') }}" />
                 <x-jet-input wire:model="phone" id="phone" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="mobile" value="{{ __('mobile') }}" />
+                <x-jet-label for="mobile" value="{{ __('Mobile') }}" />
                 <x-jet-input wire:model="mobile" id="mobile" class="block mt-1 w-full" type="text" />
             </div>
         </x-slot>

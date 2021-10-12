@@ -15,10 +15,10 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Mobile</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Name') }}</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Email') }}</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Phone') }}</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Mobile') }}</th>
                                 <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"></th>
                             </tr>
                         </thead>
@@ -46,7 +46,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td class="px-6 py-4 text-sm withespace-no-wrap" colspan="4">{{ __('No results found') }}</td>
+                                    <td class="px-6 py-4 text-sm withespace-no-wrap" colspan="4">{{ __('No Results Found') }}</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -70,42 +70,42 @@
 
         <x-slot name="content">
             <div class="mt-4">
-                <x-jet-label for="name" value="{{ __('name') }}" />
+                <x-jet-label for="name" value="{{ __('Name') }}" />
                 <x-jet-input wire:model="name" id="name" class="block mt-1 w-full" type="text" />
                 @error('name') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="mt-4">
-                <x-jet-label for="email" value="{{ __('email') }}" />
+                <x-jet-label for="email" value="{{ __('Email') }}" />
                 <x-jet-input wire:model="email" id="email" class="block mt-1 w-full" type="text" />
                 @error('email') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="mt-4">
-                <x-jet-label for="address" value="{{ __('address') }}" />
+                <x-jet-label for="address" value="{{ __('Address') }}" />
                 <x-jet-input wire:model="address" id="address" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="postal_code" value="{{ __('postal_code') }}" />
+                <x-jet-label for="postal_code" value="{{ __('Postal Code') }}" />
                 <x-jet-input wire:model="postal_code" id="postal_code" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="city" value="{{ __('city') }}" />
+                <x-jet-label for="city" value="{{ __('City') }}" />
                 <x-jet-input wire:model="city" id="city" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="phone" value="{{ __('phone') }}" />
+                <x-jet-label for="phone" value="{{ __('Phone') }}" />
                 <x-jet-input wire:model="phone" id="phone" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="mobile" value="{{ __('mobile') }}" />
+                <x-jet-label for="mobile" value="{{ __('Mobile') }}" />
                 <x-jet-input wire:model="mobile" id="mobile" class="block mt-1 w-full" type="text" />
             </div>
             <div class="mt-4">
-                <x-jet-label for="birthdate" value="{{ __('birthdate (yyyy-mm-dd)') }}" />
+                <x-jet-label for="birthdate" value="{{ __('Birthdate') }} (yyyy-mm-dd)" />
                 <x-jet-input wire:model="birthdate" id="birthdate" class="block mt-1 w-full" type="text" />
                 @error('birthdate') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="mt-4">
-                <x-jet-label for="user_id" value="{{ __('User') }}" />
+                <x-jet-label for="user_id" value="{{ __('Connected User') }}" />
                 <select wire:model="user_id" id="user_id" class="block appearance-none w-full 
                 bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 round leading-tight 
                 focus:outline-none focus:bg-white focus:border-gray-500">
