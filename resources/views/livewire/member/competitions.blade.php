@@ -1,36 +1,6 @@
 <div class="p-6">
     <div class="flex flex-row items-center justify-end px-4 py-3 text-right sm:px-6">
-        <div class="m-2">
-            <label class="text-sm">{{ __('Start date') }}</label>
-            <x-date-picker wire:model="start_date" class="border-gray-300 text-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"/>
-        </div>
-        <div class="m-2">
-            <label class="text-sm">{{ __('End date') }}</label>
-            <x-date-picker wire:model="end_date" class="border-gray-300 text-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"/>
-        </div>
-        <div class="m-2">
-            <label class="text-sm">{{ __('Organisation') }}</label>
-            <select wire:ignore wire:model="competition_search_name" class="block w-100 text-sm appearance-none
-            bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
-            focus:outline-none focus:bg-white focus:border-gray-500">
-            <option value="">{{ __('All') }}</option>
-                @foreach($competition_names as $item)
-                    <option value="{{ $item->name }}">{{ $item->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="m-2">
-            <label class="text-sm">{{ __('Teams') }}</label>
-            <select wire:ignore wire:model="team_search_name" class="block w-full text-sm appearance-none 
-            bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
-            focus:outline-none focus:bg-white focus:border-gray-500">
-            <option value="">{{ __('All') }}</option>
-                @foreach($team_names as $item)
-                    <option value="{{ $item->name }}">{{ $item->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <x-jet-success-button wire:click="searchSubmit">
+        <x-jet-success-button wire:click="searchModal">
             {{ __('Search') }}
         </x-jet-button>
         @can('create', App\Models\Competition::class)
@@ -211,7 +181,15 @@
         </x-slot>
 
         <x-slot name="content">
-            {{ __('Are you sure you want to delete this competition?') }}
+            <label class="text-sm">{{ __('Participants') }}</label>
+            <select wire:ignore wire:model="participants_search" multiple size="2" class="block w-full text-sm appearance-none 
+            bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
+            focus:outline-none focus:bg-white focus:border-gray-500">
+            <option value="">{{ __('All') }}</option>
+                @foreach($all_members as $item)
+                    <option value="{{ $item->name }}">{{ $item->name }}</option>
+                @endforeach
+            </select>
         </x-slot>
 
         <x-slot name="footer">
@@ -224,4 +202,69 @@
             </x-jet-danger-button>
         </x-slot>
     </x-jet-dialog-modal>
+
+        <!-- Search Participants Modal -->
+        <x-jet-dialog-modal wire:model="modalSearchVisible">
+
+            <x-slot name="title">
+                    {{ __('Search') }}
+            </x-slot>
+    
+            <x-slot name="content">
+                <div class="m-2">
+                    <label class="text-sm">{{ __('Start date') }}</label>
+                    <x-date-picker wire:model="start_date" class="border-gray-300 text-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"/>
+                </div>
+                <div class="m-2">
+                    <label class="text-sm">{{ __('End date') }}</label>
+                    <x-date-picker wire:model="end_date" class="border-gray-300 text-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"/>
+                </div>
+                <div class="m-2">
+                    <label class="text-sm">{{ __('Organisation') }}</label>
+                    <select wire:model="competition_search_name" class="block w-100 text-sm appearance-none
+                    bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
+                    focus:outline-none focus:bg-white focus:border-gray-500">
+                    <option value="">{{ __('All') }}</option>
+                        @foreach($competition_names as $item)
+                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="m-2">
+                    <label class="text-sm">{{ __('Teams') }}</label>
+                    <select wire:model="team_search_name" class="block w-full text-sm appearance-none 
+                    bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
+                    focus:outline-none focus:bg-white focus:border-gray-500">
+                    <option value="">{{ __('All') }}</option>
+                        @foreach($team_names as $item)
+                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="m-2">
+                    <label class="text-sm">{{ __('Participants') }}</label>
+                    <select wire:model="participants_search" multiple size="4" class="block w-100 text-sm appearance-none
+                    bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
+                    focus:outline-none focus:bg-white focus:border-gray-500">
+                    <option value="">{{ __('All') }}</option>
+                        @foreach($all_members as $item)
+                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>                    
+                </div>
+            </x-slot>
+    
+            <x-slot name="footer">
+                <x-jet-button wire:click="resetSearchCriteria">
+                    {{ __('Reset Search') }}
+                </x-jet-button>
+                <x-jet-secondary-button wire:click="$toggle('modalSearchVisible')" wire:loading.attr="disabled">
+                    {{ __('Cancel') }}
+                </x-jet-secondary-button>
+    
+                <x-jet-danger-button class="ml-2" wire:click="searchSubmit" wire:loading.attr="disabled">
+                    {{ __('Search') }}
+                </x-jet-danger-button>
+            </x-slot>
+        </x-jet-dialog-modal>
 </div>

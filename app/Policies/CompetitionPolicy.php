@@ -23,6 +23,10 @@ class CompetitionPolicy
         return in_Array($user->role_id,[Role::isSiteAdmin]);
     }
 
+    public function view(User $user) {
+        return in_array($user->role_id,[Role::isSiteAdmin,Role::isContentManager,Role::isBlogModerator,Role::isTeamCaptain,Role::isMember]);
+    }
+
     /**
      * Create a new policy instance.
      *
