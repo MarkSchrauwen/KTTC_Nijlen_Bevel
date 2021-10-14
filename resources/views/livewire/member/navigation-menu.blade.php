@@ -5,9 +5,15 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('member.dashboard') }}">
-                        <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="50px" class="rounded-circle">
-                    </a>
+                        @if(auth()->user()->isAdmin)
+                        <a href="{{ route('admin.dashboard') }}">
+                            <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="50px" class="rounded-circle">
+                        </a> 
+                    @else
+                        <a href="{{ route('member.dashboard') }}">
+                            <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="50px" class="rounded-circle">
+                        </a>                    
+                    @endif
                 </div>
 
                 <!-- Navigation Links -->
@@ -45,6 +51,25 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <!-- Link to dashboards -->
+                            @if(auth()->user()->isAdmin)
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Dashboards') }}
+                                </div>
+                                <x-jet-dropdown-link href="{{ route('admin.dashboard') }}">
+                                    {{ __('Admin Dashboard') }}
+                                </x-jet-dropdown-link>
+                            @else
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Dashboard') }}
+                                </div>
+                            @endif
+
+
+                            <x-jet-dropdown-link href="{{ route('member.dashboard') }}">
+                                {{ __('Member Dashboard') }}
+                            </x-jet-dropdown-link>
+
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
                                 {{ __('Manage Account') }}
@@ -117,6 +142,11 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <!-- Dashboards -->
+                <x-jet-responsive-nav-link href="{{ route('member.dashboard') }}" :active="request()->routeIs('member.dashboard')">
+                    {{ __('Member Dashboard') }}
+                </x-jet-responsive-nav-link>
+                
                 <!-- Account Management -->
                 <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
                     {{ __('Profile') }}

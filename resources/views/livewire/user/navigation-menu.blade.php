@@ -5,9 +5,19 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
+                    @if(auth()->user()->isAdmin)
+                        <a href="{{ route('admin.dashboard') }}">
+                            <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="50px" class="rounded-circle">
+                        </a>
+                    @elseif(auth()->user()->isMember)
+                        <a href="{{ route('member.dashboard') }}">
+                            <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="50px" class="rounded-circle">
+                        </a>
+                    @else
                     <a href="{{ route('user.home') }}">
                         <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="50px" class="rounded-circle">
                     </a>
+                    @endif
                 </div>
 
                 <!-- Navigation Links -->

@@ -1,7 +1,9 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <x-jet-authentication-card-logo />
+            <div>
+                <img src="{{ asset('images/KTTC Nijlen-Bevel.png') }}" alt="club_logo" width="150px" class="rounded-full">
+            </div>
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />

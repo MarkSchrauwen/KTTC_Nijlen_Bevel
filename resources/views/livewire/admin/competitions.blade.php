@@ -255,7 +255,7 @@
                         {{ __('Cancel') }}
                     </x-jet-secondary-button>
         
-                    <x-jet-danger-button class="ml-2" wire:click="searchSubmit" wire:loading.attr="disabled">
+                    <x-jet-success-button class="ml-2" wire:click="searchSubmit" wire:loading.attr="disabled">
                         {{ __('Search') }}
                     </x-jet-danger-button>
                 </x-slot>
