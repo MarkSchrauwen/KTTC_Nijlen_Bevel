@@ -74,7 +74,7 @@ class CompetitionTeams extends Component
     */
     public function read(){
         $this->authorize('viewAny',CompetitionTeam::class);
-        return CompetitionTeam::paginate(11);
+        return CompetitionTeam::orderBy('name','Asc')->paginate(11);
     }
 
     /**

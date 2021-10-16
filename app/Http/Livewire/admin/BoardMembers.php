@@ -92,7 +92,7 @@ class BoardMembers extends Component
     */
     public function read(){
         $this->authorize('viewAny',BoardMember::class);
-        return BoardMember::paginate(11);
+        return BoardMember::orderBy('name','Asc')->paginate(11);
     }
 
     /**

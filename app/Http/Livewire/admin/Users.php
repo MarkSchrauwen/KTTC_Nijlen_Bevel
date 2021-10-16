@@ -188,7 +188,9 @@ class Users extends Component
     public function delete() {
         $this->authorize('delete',User::class);
         if($this->modelId != auth()->user()->id) {
-            Member::where('user_id',$this->modelId)->first()->update(["user_id" => null]);
+            if(Member::where('user_id',$this->modelId)->first() != null) {
+                Member::where('user_id',$this->modelId)->first()->update(["user_id" => null]);                
+            }
             User::destroy($this->modelId);            
         } else {
             session()->flash("userError","You can't delete your own user registration !");

@@ -122,7 +122,7 @@ class Members extends Component
     */
     public function read(){
         $this->authorize('view',Member::class);
-        return Member::paginate(11);
+        return Member::orderBy('name','Asc')->paginate(11);
     }
 
     /**
