@@ -5,9 +5,12 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Member;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\DeleteUserNotification;
+use App\Notifications\UpdateUserNotification;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Notification;
 
 class Users extends Component
 {
@@ -151,19 +154,28 @@ class Users extends Component
             if($this->connectedMember == "" || $this->connectedMember == null ) {
                 $this->roleName = "User";
                 User::find($this->modelId)->update($this->modelData());
+                $concernedUser = User::find($this->modelId);
+                $role = $concernedUser->role->name;
                 Member::where('name','LIKE',$this->oldConnectedMember)->update(['user_id'=> null]);
                 $this->oldConnectedMember = $this->connectedMember;
+                $admins = User::where('role_id', Role::isSiteAdmin)->get();
+                Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, null, $role));
 
             // if Connected Member was chosen we have to check if we are not going to overwrite
             // another Connected Member
             } else {
-                $memberUserId = Member::where('name','LIKE',$this->connectedMember)->first()->user_id;
+                $connectedMember = Member::where('name','LIKE',$this->connectedMember)->first();
+                $memberUserId = $connectedMember->user_id;
                 if($memberUserId != null) {
                     
                     // there is already a user_id present so we have to check if connected Member
                     // is the same as the user selected to be updated ELSE we send error
                     if($memberUserId == $this->modelId) {
-                        User::find($this->modelId)->update($this->modelData());                    
+                        User::find($this->modelId)->update($this->modelData());
+                        $concernedUser = User::find($this->modelId);
+                        $role = $concernedUser->role->name;
+                        $admins = User::where('role_id', Role::isSiteAdmin)->get();
+                        Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, $connectedMember, $role));                    
                     } else {
                         session()->flash("userError","You can't select a member that is already connected to another user !");
                     }
@@ -174,6 +186,10 @@ class Users extends Component
                         Member::where('name','LIKE',$this->connectedMember)->update(['user_id'=> $this->modelId]);
                         Member::where('name','LIKE',$this->oldConnectedMember)->update(['user_id'=> null]);
                         $this->oldConnectedMember = $this->connectedMember;
+                        $concernedUser = User::find($this->modelId);
+                        $role = $concernedUser->role->name;
+                        $admins = User::where('role_id', Role::isSiteAdmin)->get();
+                        Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, $connectedMember, $role));
                 }                
             }
                 
@@ -191,7 +207,10 @@ class Users extends Component
             if(Member::where('user_id',$this->modelId)->first() != null) {
                 Member::where('user_id',$this->modelId)->first()->update(["user_id" => null]);                
             }
-            User::destroy($this->modelId);            
+            $concernedUser = User::find($this->modelId);
+            User::destroy($this->modelId);
+            $admins = User::where('role_id', Role::isSiteAdmin)->get();
+            Notification::send($admins, new DeleteUserNotification(auth()->user(), $concernedUser));            
         } else {
             session()->flash("userError","You can't delete your own user registration !");
         }

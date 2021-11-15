@@ -5,9 +5,13 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Member;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\CreateMemberNotification;
+use App\Notifications\DeleteMemberNotification;
+use App\Notifications\UpdateMemberNotification;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Notification;
 
 class Members extends Component
 {
@@ -104,11 +108,16 @@ class Members extends Component
         if($this->user_id != null && $member != null) {
             session()->flash('memberError','You are not allowed to connect a user that is already linked to another member !');
         } else {
-            Member::create($this->modelData());
+            $member = Member::create($this->modelData());
             // if user was chosen to connect then set role to Member
             if($this->user_id != null) {
-                User::find($this->user_id)->update(["isAdmin" => "0", "role_id" => Role::isMember]);                
+                User::find($this->user_id)->update(["isAdmin" => "0", "role_id" => Role::isMember]);
+                $connectedUser = User::find($this->user_id);                
+            } else {
+                $connectedUser = null;
             }
+            $admins = User::where('role_id', Role::isSiteAdmin)->get();
+            Notification::send($admins, new CreateMemberNotification(auth()->user(), $member, $connectedUser));
             session()->flash('memberSuccess','You succesfully created a new member !');           
         }
         $this->modalFormVisible = false;
@@ -140,6 +149,10 @@ class Members extends Component
         // then we need to reset isAdmin to 0 and role to isUser
         if($this->user_id == $this->old_user_id) {
             Member::find($this->modelId)->update($this->modelData());
+            $member = Member::find($this->modelId);
+            $connectedUser = User::find($this->user_id);
+            $admins = User::where('role_id', Role::isSiteAdmin)->get();
+            Notification::send($admins, new UpdateMemberNotification(auth()->user(), $member, $connectedUser));
             session()->flash("memberSuccess","You have succesfully updated a member !");
         } else {
             if($this->old_user_id == auth()->user()->id) {
@@ -150,25 +163,33 @@ class Members extends Component
                 if($this->user_id == "" || $this->user_id == null) {
                     $this->user_id = null;
                     Member::find($this->modelId)->update($this->modelData());
+                    $member = Member::find($this->modelId);
+                    $connectedUser = null;
                     if($this->old_user_id != null || $this->old_user_id != null) {
                         User::find($this->old_user_id)->update(["isAdmin" => "0", "role_id" => Role::isUser]);
                     }
                     $this->old_user_id = $this->user_id;
+                    $admins = User::where('role_id', Role::isSiteAdmin)->get();
+                    Notification::send($admins, new UpdateMemberNotification(auth()->user(), $member, $connectedUser));
                     session()->flash("userSuccess","You have successfully updated a member !");
                 } else {
-                    $member = Member::where('user_id',$this->user_id)->first();
-                    if($member != null) {
+                    $alreadyExistingMember = Member::where('user_id',$this->user_id)->first();
+                    if($alreadyExistingMember != null) {
                         session()->flash("memberError","chosen User to connect is already linked to another User !");
                     } else {
                         // update Member and
                         // 1- update role of connected User to Member
                         // 2- update role of old connected User to User
                         Member::find($this->modelId)->update($this->modelData());
+                        $member = Member::find($this->modelId);
                         User::find($this->user_id)->update(["isAdmin" => "0", "role_id" => Role::isMember]);
                         if($this->old_user_id != null || $this->old_user_id != null) {
                             User::find($this->old_user_id)->update(["isAdmin" => "0", "role_id" => Role::isUser]);
                         }
                         $this->old_user_id = $this->user_id;
+                        $connectedUser = User::find($this->user_id);
+                        $admins = User::where('role_id', Role::isSiteAdmin)->get();
+                        Notification::send($admins, new UpdateMemberNotification(auth()->user(), $member, $connectedUser));
                         session()->flash("userSuccess","You have successfully updated a member !");
                     }                    
                 }               
@@ -185,7 +206,8 @@ class Members extends Component
     public function delete(){
         $this->authorize('delete',Member::class);
         
-        $memberUserId = Member::find($this->modelId)->user_id;
+        $member = Member::find($this->modelId);
+        $memberUserId = $member->user_id;
         // don't allow Admin to delete his own membership
         if($memberUserId == auth()->user()->id) {
             session()->flash("memberError","You can't delete your own membership !");
@@ -195,7 +217,9 @@ class Members extends Component
                 $userId = Member::find($this->modelId)->user_id;
                 User::find($userId)->update(["isAdmin" => "0", "role_id" => Role::isUser]);
             }
-            Member::destroy($this->modelId);            
+            Member::destroy($this->modelId);
+            $admins = User::where('role_id', Role::isSiteAdmin)->get();
+            Notification::send($admins, new DeleteMemberNotification(auth()->user(), $member));            
         }
 
         $this->modalConfirmDeleteVisible = false;
