@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
-use Livewire\Withpagination;
+use Livewire\WithPagination;
 
 class Dashboard extends Component
 {
-    use Withpagination;
+    use WithPagination;
 
     public function mount() {
         $this->firstname = auth()->user()->firstname;
