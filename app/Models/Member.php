@@ -14,7 +14,7 @@ class Member extends Model
     protected $table = "members";
 
     protected $fillable = [
-        "user_id", "name", "email", "address", "postal_code", "city", "phone", "mobile",
+        "user_id", "firstname","lastname", "email", "address", "postal_code", "city", "phone", "mobile",
         "birthdate",
     ];
 

@@ -47,7 +47,7 @@ class UpdateUserNotification extends Notification
             "admin" => $this->user->firstname . " " . $this->user->lastname,
             "concernedUser" => $this->concernedUser->firstname . " " . $this->concernedUser->lastname,
             "connectedMember" => $this->connectedMember 
-                ? $this->connectedMember->name
+                ? $this->connectedMember->firstname . " " . $this->connectedMember->lastname
                 : null,
             "role" => $this->role,
         ];

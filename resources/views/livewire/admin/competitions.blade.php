@@ -47,7 +47,7 @@
                                         <td class="w-1/12 px-2 py-2 text-xs">{{ $item->visitor_team }}</td>
                                         <td class="w-3/12 px-2 py-2 text-xs">
                                             @foreach ($item->members as $singleMember)
-                                                <span class="badge bg-primary text-xs">{{ $singleMember->name }}</span>
+                                                <span class="badge bg-primary text-xs">{{ $singleMember->firstname }} {{ $singleMember->lastname }}</span>
                                             @endforeach
                                         </td>
                                         <td class="px-2 py-2 flex justify-end">
@@ -149,7 +149,7 @@
                         @foreach($all_members as $singleMember)
                             <option value="{{ $singleMember->id }}"
                                 {{ in_array($singleMember->id, $participants) ? "selected='selected'" : "" }}>
-                                {{ $singleMember->name }}</option>
+                                {{ $singleMember->firstname }} {{ $singleMember->lastname }}</option>
                         @endforeach
                     </select>
                     @error('participants') <span class="error">{{ $message }}</span> @enderror
@@ -196,7 +196,7 @@
         </x-slot>
     </x-jet-dialog-modal>
 
-            <!-- Search Participants Modal -->
+            <!-- Search Modal -->
             <x-jet-dialog-modal wire:model="modalSearchVisible">
 
                 <x-slot name="title">
@@ -235,13 +235,13 @@
                         </select>
                     </div>
                     <div class="m-2">
-                        <label class="text-sm">{{ __('Participants') }}</label>
+                        <label class="text-sm">{{ __('Participants lastname') }}</label>
                         <select wire:model="participants_search" multiple size="4" class="block w-100 text-sm appearance-none
                         bg-gray-100 border border-gray-300 text-gray-700 mx-1 py-1 px-2 pr-8 rounded round leading-tight 
                         focus:outline-none focus:bg-white focus:border-gray-500">
                         <option value="">{{ __('All') }}</option>
                             @foreach($all_members as $item)
-                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                <option value="{{ $item->lastname }}">{{ $item->firstname }} {{ $item->lastname }}</option>
                             @endforeach
                         </select>                    
                     </div>

@@ -139,7 +139,7 @@ class Competitions extends Component
     }
 
     public function getMembers() {
-        return Member::orderBy("name","ASC")->get();
+        return Member::orderBy("lastname","ASC")->get();
     }
 
     public function resetOnlyLivewireVariables() {
@@ -186,7 +186,7 @@ class Competitions extends Component
                 ->where('visitor_team',"LIKE",'%'.$this->visitorSearch.'%')
                 ->with('members')
                 ->whereHas('members', function($member) {
-                    $member->whereIn("name", $this->participantsSearch);
+                    $member->whereIn("lastname", $this->participantsSearch);
                 })
                 ->paginate(11);
             } else {
@@ -211,7 +211,7 @@ class Competitions extends Component
                     ->where('competition_date',"<=", $this->endDateSearch)
                     ->with('members')
                     ->whereHas('members', function($member) {
-                        $member->whereIn("name", $this->participantsSearch);
+                        $member->whereIn("lastname", $this->participantsSearch);
                     })
                     ->paginate(11);
             } else {
@@ -236,7 +236,7 @@ class Competitions extends Component
                     ->where('competition_date',">=", $this->startDateSearch)
                     ->with('members')
                     ->whereHas('members', function($member) {
-                        $member->whereIn("name", $this->participantsSearch);
+                        $member->whereIn("lastname", $this->participantsSearch);
                     })
                     ->paginate(11);
             } else {
@@ -261,7 +261,7 @@ class Competitions extends Component
                     ->whereBetween('competition_date', [$this->startDateSearch,$this->endDateSearch])
                     ->with('members')
                     ->whereHas('members', function($member) {
-                        $member->whereIn("name", $this->participantsSearch);
+                        $member->whereIn("lastname", $this->participantsSearch);
                     })
                     ->paginate(11);
             } else {

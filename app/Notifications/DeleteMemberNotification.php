@@ -43,7 +43,7 @@ class DeleteMemberNotification extends Notification
     {
         return [
             "admin" => $this->user->firstname . " " . $this->user->lastname,
-            "member" => $this->member->name,
+            "member" => $this->member->firstname . " " . $this->member->lastname,
         ];
     }
 }

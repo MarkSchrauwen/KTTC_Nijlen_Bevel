@@ -27,7 +27,8 @@ class Members extends Component
     */
     public $user_id;
     public $old_user_id;
-    public $name;
+    public $firstname;
+    public $lastname;
     public $email;
     public $address;
     public $postal_code;
@@ -43,7 +44,8 @@ class Members extends Component
     */
     public function rules(){
         return [
-            "name" => "required",
+            "firstname" => "required",
+            "lastname" => "required",
             "email" => "email|nullable",
             "birthdate" => "date|nullable",
         ];
@@ -59,7 +61,8 @@ class Members extends Component
         // Assign the variables here
         $this->user_id = $data->user_id;
         $this->old_user_id = $data->user_id;
-        $this->name = $data->name;
+        $this->firstname = $data->firstname;
+        $this->lastname = $data->lastname;
         $this->email = $data->email;
         $this->address = $data->address;
         $this->postal_code = $data->postal_code;
@@ -77,7 +80,8 @@ class Members extends Component
     public function modelData(){
         return [
             "user_id" => $this->user_id,
-            "name" => $this->name,
+            "firstname" => $this->firstname,
+            "lastname" => $this->lastname,
             "email" => $this->email,
             "address" => $this->address,
             "postal_code" => $this->postal_code,
@@ -90,9 +94,6 @@ class Members extends Component
 
     public function resetOnlyLivewireVariables() {
         $this->reset();
-        $this->getCompetitionNames();
-        $this->getTeamNames();
-        $this->getMembers();
     }
 
     /**
@@ -131,7 +132,7 @@ class Members extends Component
     */
     public function read(){
         $this->authorize('view',Member::class);
-        return Member::orderBy('name','Asc')->paginate(11);
+        return Member::orderBy('lastname','Asc')->paginate(11);
     }
 
     /**
@@ -266,7 +267,7 @@ class Members extends Component
      * @return void
      */
     public function getUsers() {
-        return User::select('id', 'firstname', 'lastname')->get();
+        return User::select('id', 'firstname', 'lastname')->orderBy('lastname', 'ASC')->get();
     }
 
     /**

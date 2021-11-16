@@ -26,7 +26,7 @@
                             @if($data->count())
                                 @foreach ($data as $item)
                                     <tr>
-                                        <td class="px-6 py-2">{{ $item->name }}</td>
+                                        <td class="px-6 py-2">{{ $item->firstname }} {{ $item->lastname }}</td>
                                         <td class="px-6 py-2">{{ $item->email }}</td>
                                         <td class="px-6 py-2">{{ $item->phone }}</td>
                                         <td class="px-6 py-2">{{ $item->mobile }}</td>
@@ -70,9 +70,14 @@
 
         <x-slot name="content">
             <div class="mt-4">
-                <x-jet-label for="name" value="{{ __('Name') }}" />
-                <x-jet-input wire:model="name" id="name" class="block mt-1 w-full" type="text" />
-                @error('name') <span class="error">{{ $message }}</span> @enderror
+                <x-jet-label for="firstname" value="{{ __('First Name') }}" />
+                <x-jet-input wire:model="firstname" id="firstname" class="block mt-1 w-full" type="text" />
+                @error('firstname') <span class="error">{{ $message }}</span> @enderror
+            </div>
+            <div class="mt-4">
+                <x-jet-label for="lastname" value="{{ __('Last Name') }}" />
+                <x-jet-input wire:model="lastname" id="lastname" class="block mt-1 w-full" type="text" />
+                @error('lastname') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="mt-4">
                 <x-jet-label for="email" value="{{ __('Email') }}" />

@@ -30,7 +30,7 @@ class Users extends Component
     public $lastNameSearch = "";
     public $roleName;
     public $connectedMember;
-    public $oldConnectedMember = "";
+    public $oldConnectedMember;
     public $allMembers;
     public $userFirstName;
     public $userLastName;
@@ -84,9 +84,10 @@ class Users extends Component
         $this->userLastName = $data->lastname;
         $this->userEmail = $data->email;
         if($data->role_id == Role::isUser) {
-            $this->connectedMember = "";
+            $this->connectedMember = null;
+            $this->oldConnectedMember = null;
         } else {
-            $this->connectedMember = User::find($this->modelId)->member->name;
+            $this->connectedMember = User::find($this->modelId)->member->id;
             $this->oldConnectedMember = $this->connectedMember;
         }
         
@@ -109,7 +110,7 @@ class Users extends Component
     }
 
     public function getMembers() {
-        $this->allMembers = Member::select('name')->get()->unique('name');
+        $this->allMembers = Member::select('id','firstname','lastname')->orderBy("lastname","ASC")->get();
     }
 
     public function getRoleNames() {
@@ -138,7 +139,8 @@ class Users extends Component
         }
         foreach($users as $user) {
             if(User::find($user->id)->member != null) {
-                $user->memberName = User::find($user->id)->member->name;                
+                $member = User::find($user->id)->member;
+                $user->memberName = $member->firstname . " " . $member->lastname;                
             } else {$user->memberName = "";}
         }
         return $users;
@@ -156,7 +158,9 @@ class Users extends Component
                 User::find($this->modelId)->update($this->modelData());
                 $concernedUser = User::find($this->modelId);
                 $role = $concernedUser->role->name;
-                Member::where('name','LIKE',$this->oldConnectedMember)->update(['user_id'=> null]);
+                if(!empty($this->oldConnectedMember)) {
+                    Member::find($this->oldConnectedMember)->update(['user_id'=> null]);                    
+                }
                 $this->oldConnectedMember = $this->connectedMember;
                 $admins = User::where('role_id', Role::isSiteAdmin)->get();
                 Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, null, $role));
@@ -164,8 +168,8 @@ class Users extends Component
             // if Connected Member was chosen we have to check if we are not going to overwrite
             // another Connected Member
             } else {
-                $connectedMember = Member::where('name','LIKE',$this->connectedMember)->first();
-                $memberUserId = $connectedMember->user_id;
+                $foundMember = Member::find($this->connectedMember);
+                $memberUserId = $foundMember->user_id;
                 if($memberUserId != null) {
                     
                     // there is already a user_id present so we have to check if connected Member
@@ -175,7 +179,7 @@ class Users extends Component
                         $concernedUser = User::find($this->modelId);
                         $role = $concernedUser->role->name;
                         $admins = User::where('role_id', Role::isSiteAdmin)->get();
-                        Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, $connectedMember, $role));                    
+                        Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, $foundMember, $role));                    
                     } else {
                         session()->flash("userError","You can't select a member that is already connected to another user !");
                     }
@@ -183,13 +187,15 @@ class Users extends Component
                 // The Connected Member was still free (null) so we can load User_id into the Member-model
                 } else {
                         User::find($this->modelId)->update($this->modelData());
-                        Member::where('name','LIKE',$this->connectedMember)->update(['user_id'=> $this->modelId]);
-                        Member::where('name','LIKE',$this->oldConnectedMember)->update(['user_id'=> null]);
+                        Member::find($this->connectedMember)->update(['user_id'=> $this->modelId]);
+                        if(!empty($this->oldConnectedMember)) {
+                            Member::find($this->oldConnectedMember)->update(['user_id'=> null]);                    
+                        }
                         $this->oldConnectedMember = $this->connectedMember;
                         $concernedUser = User::find($this->modelId);
                         $role = $concernedUser->role->name;
                         $admins = User::where('role_id', Role::isSiteAdmin)->get();
-                        Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, $connectedMember, $role));
+                        Notification::send($admins, new UpdateUserNotification(auth()->user(), $concernedUser, $foundMember, $role));
                 }                
             }
                 
@@ -229,7 +235,7 @@ class Users extends Component
         $this->modalConfirmDeleteVisible = true;
     }
 
-        /**
+    /**
      * Function shows Update Modal
      *
      * @param  mixed $id
@@ -242,6 +248,12 @@ class Users extends Component
         $this->loadModel();
         }
 
+    /**
+     * Function start search when submitted in the view
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function searchSubmit() {
         if($this->role_search == null || $this->role_search == "") {
             $this->roleSearch = $this->role_search;

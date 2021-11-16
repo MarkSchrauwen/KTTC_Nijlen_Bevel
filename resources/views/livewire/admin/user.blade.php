@@ -30,11 +30,7 @@
                             <tr>
                                 <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium 
                                     text-gray-500 uppercase tracking-wider">
-                                    {{ __('First Name') }}
-                                </th>
-                                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium 
-                                    text-gray-500 uppercase tracking-wider">
-                                    {{ __('Last Name') }}
+                                    {{ __('Name') }}
                                 </th>
                                 <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium 
                                     text-gray-500 uppercase tracking-wider">
@@ -58,8 +54,7 @@
                                 @if($data->count())
                                     @foreach($data as $item)
                                         <tr>
-                                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->firstname }}</td>
-                                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->lastname }}</td>
+                                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->firstname }} {{ $item->lastname }}</td>
                                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->email }}</td>
                                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->memberName }}</td>
                                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->role->name }}</td>
@@ -107,8 +102,8 @@
                     <select wire:model="connectedMember" class="appearance-none text-xs">
                         <option value="">{{ __('None') }}</option>
                         @foreach($allMembers as $member)
-                            <option value="{{ $member->name }}">
-                                {{ $member->name }}
+                            <option value="{{ $member->id }}">
+                                {{ $member->firstname }} {{ $member->lastname }}
                             </option>
                         @endforeach
                     </select>
