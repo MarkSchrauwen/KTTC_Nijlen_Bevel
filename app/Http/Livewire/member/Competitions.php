@@ -6,9 +6,13 @@ use App\Models\Competition;
 use App\Models\CompetitionTeam;
 use App\Models\CompetitionOrganisation;
 use App\Models\Member;
+use App\Models\Role;
+use App\Models\User;
+use App\Notifications\UpdateCompetitionNotification;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Notification;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -281,6 +285,8 @@ class Competitions extends Component
         $this->validate();
         Competition::find($this->modelId)->update($this->modelData());
         Competition::find($this->modelId)->members()->sync($this->participants);
+        $admins = User::where('role_id', Role::isSiteAdmin)->get();
+        Notification::send($admins, new UpdateCompetitionNotification(auth()->user(), $this->modelId));
         $this->modalFormVisible = false;
     }
 

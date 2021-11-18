@@ -6,10 +6,16 @@ use App\Models\Competition;
 use App\Models\CompetitionTeam;
 use App\Models\CompetitionOrganisation;
 use App\Models\Member;
+use App\Models\Role;
+use App\Models\User;
+use App\Notifications\CreateCompetitionNotification;
+use App\Notifications\DeleteCompetitionNotification;
+use App\Notifications\UpdateCompetitionNotification;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Notification;
 
 class Competitions extends Component
 {
@@ -63,7 +69,8 @@ class Competitions extends Component
         return [
             "team_name"=> 'required',
             "competition" => 'nullable',
-            "season" => 'nullable',
+            "season" => 'required',
+            "competition_number" => 'required',
             "competition_date" => 'required|date_format:Y-m-d',
             "competition_time" => 'required',
             "home_team" => 'required',
@@ -168,7 +175,10 @@ class Competitions extends Component
     public function create() {
         $this->authorize('create',Competition::class);
         $this->validate();
-        Competition::create($this->modelData())->members()->sync($this->participants);;
+        $competition = Competition::create($this->modelData());
+        $competition->members()->sync($this->participants);
+        $admins = User::where('role_id', Role::isSiteAdmin)->get();
+        Notification::send($admins, new CreateCompetitionNotification(auth()->user(), $competition->id));
         $this->modalFormVisible = false;
         $this->resetOnlyLivewireVariables();
     }
@@ -294,6 +304,8 @@ class Competitions extends Component
         $this->validate();
         Competition::find($this->modelId)->update($this->modelData());
         Competition::find($this->modelId)->members()->sync($this->participants);
+        $admins = User::where('role_id', Role::isSiteAdmin)->get();
+        Notification::send($admins, new UpdateCompetitionNotification(auth()->user(), $this->modelId));
         $this->modalFormVisible = false;
     }
 
@@ -305,6 +317,8 @@ class Competitions extends Component
     public function delete(Competition $competition){
         $this->authorize('delete', $competition);
         Competition::destroy($this->modelId);
+        $admins = User::where('role_id', Role::isSiteAdmin)->get();
+        Notification::send($admins, new DeleteCompetitionNotification(auth()->user(), $this->modelId));
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();
     }
