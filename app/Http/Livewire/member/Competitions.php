@@ -8,7 +8,6 @@ use App\Models\CompetitionOrganisation;
 use App\Models\Member;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use function PHPUnit\Framework\isEmpty;
@@ -19,7 +18,7 @@ class Competitions extends Component
     use AuthorizesRequests;
 
     public $modalFormVisible = false;
-    public $modalConfirmDeleteVisible = false;
+    public $modalDetailsFormVisible = false;
     public $modalSearchVisible = false;
     public $modelId;
 
@@ -35,6 +34,7 @@ class Competitions extends Component
     public $competition_time;
     public $home_team;
     public $visitor_team;
+    public $comment;
     public $participants = [];
 
     /**
@@ -62,13 +62,13 @@ class Competitions extends Component
     public function rules(){
         return [
             "team_name"=> 'required',
-            "competition" => 'required',
-            "season" => 'required',
+            "competition" => 'nullable',
+            "season" => 'nullable',
             "competition_date" => 'required|date_format:Y-m-d',
             "competition_time" => 'required',
             "home_team" => 'required',
             "visitor_team" => 'required',
-            "participants" => 'required',
+            "comment" => 'nullable',
         ];
     }
 
@@ -98,6 +98,7 @@ class Competitions extends Component
         $this->competition_time = $data->competition_time;
         $this->home_team = $data->home_team;
         $this->visitor_team = $data->visitor_team;
+        $this->comment = $data->comment;
         foreach($data->members as $participant) {
             array_push($this->participants, $participant->id);
         }
@@ -118,6 +119,7 @@ class Competitions extends Component
             "competition_time" => $this->competition_time,
             "home_team" => $this->home_team,
             "visitor_team" => $this->visitor_team,
+            "comment" => $this->comment,
         ];
     }
 
@@ -141,7 +143,7 @@ class Competitions extends Component
     }
 
     public function getMembers() {
-        return Member::orderBy('name','ASC')->get();
+        return Member::orderBy('lastname','ASC')->get();
     }
 
     public function resetOnlyLivewireVariables() {
@@ -156,19 +158,6 @@ class Competitions extends Component
         $this->startDateSearch = $startDateSearch;
         $this->endDateSearch = $endDateSearch;
         $this->participantsSearch = $participantsSearch;
-    }
-
-    /**
-    * The create function
-    *
-    * @return void
-    */
-    public function create(){
-        $this->authorize('create',Competition::class);
-        $this->validate();
-        Competition::create($this->modelData())->members()->sync($this->participants);;
-        $this->modalFormVisible = false;
-        $this->resetOnlyLivewireVariables();
     }
 
     /**
@@ -296,15 +285,12 @@ class Competitions extends Component
     }
 
     /**
-    * The delete function
+    * The details function
     *
     * @return void
     */
-    public function delete(Competition $competition){
-        $this->authorize('delete', $competition);
-        Competition::destroy($this->modelId);
-        $this->modalConfirmDeleteVisible = false;
-        $this->resetPage();
+    public function closeDetails(Competition $competition){
+        $this->modalFormVisible = false;
     }
 
     /**
@@ -312,10 +298,13 @@ class Competitions extends Component
     *
     * @return void
     */
-    public function createShowModal(){
+    public function detailsShowModal($id){
         $this->resetValidation();
         $this->resetOnlyLivewireVariables();
-        $this->modalFormVisible = true;
+        $this->modelId = $id;
+        $this->loadModel();        
+        $this->modalDetailsFormVisible = true;
+
     }
 
     /**
@@ -327,8 +316,9 @@ class Competitions extends Component
         $this->resetValidation();
         $this->resetOnlyLivewireVariables();
         $this->modelId = $id;
+        $this->loadModel();        
         $this->modalFormVisible = true;
-        $this->loadModel();
+
     }
 
     /**
@@ -351,16 +341,6 @@ class Competitions extends Component
         $this->start_date = "";
         $this->end_date = "";
         $this->participants_search = [];
-    }
-
-    /**
-    * Function to show the delete Modal
-    *
-    * @return void
-    */
-    public function deleteShowModal($id){
-        $this->modelId = $id;
-        $this->modalConfirmDeleteVisible = true;
     }
 
     /**

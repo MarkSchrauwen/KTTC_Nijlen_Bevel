@@ -33,6 +33,7 @@ class Competitions extends Component
     public $competition_time;
     public $home_team;
     public $visitor_team;
+    public $comment;
     public $participants = [];
 
 
@@ -61,12 +62,13 @@ class Competitions extends Component
     public function rules(){
         return [
             "team_name"=> 'required',
-            "competition" => 'required',
-            "season" => 'required',
+            "competition" => 'nullable',
+            "season" => 'nullable',
             "competition_date" => 'required|date_format:Y-m-d',
             "competition_time" => 'required',
             "home_team" => 'required',
             "visitor_team" => 'required',
+            "comment" => 'nullable',
         ];
     }
 
@@ -96,6 +98,7 @@ class Competitions extends Component
         $this->competition_time = $data->competition_time;
         $this->home_team = $data->home_team;
         $this->visitor_team = $data->visitor_team;
+        $this->comment = $data->comment;
         foreach($data->members as $participant) {
             array_push($this->participants, $participant->id);
         }
@@ -116,6 +119,7 @@ class Competitions extends Component
             "competition_time" => $this->competition_time,
             "home_team" => $this->home_team,
             "visitor_team" => $this->visitor_team,
+            "comment" => $this->comment,
         ];
     }
 
@@ -161,7 +165,7 @@ class Competitions extends Component
     *
     * @return void
     */
-    public function create(Request $request){
+    public function create() {
         $this->authorize('create',Competition::class);
         $this->validate();
         Competition::create($this->modelData())->members()->sync($this->participants);;
@@ -313,6 +317,7 @@ class Competitions extends Component
     public function createShowModal(){
         $this->resetValidation();
         $this->resetOnlyLivewireVariables();
+        $this->competition = "undefined";
         $this->modalFormVisible = true;
     }
 

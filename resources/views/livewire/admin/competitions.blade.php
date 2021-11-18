@@ -18,13 +18,12 @@
                     <table class="min-w-full divide-y divide-gray-200 table-fixed">
                         <thead>
                             <tr>
-                                <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Team') }}</th>
-                                <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Competition Number') }}</th>
                                 <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Date') }}</th>
                                 <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Time') }}</th>
                                 <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Home Team') }}</th>
                                 <th class="w-1/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Visitor Team') }}</th>
                                 <th class="w-3/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Participants') }}</th>
+                                <th class="w-3/12 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Comment') }}</th>
                                 <th class="px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"></th>
                             </tr>
                         </thead>
@@ -38,9 +37,13 @@
                                             } else {
                                                 $formattedDate = $item->competition_date;
                                             }
+                                            if($item->comment != null) {
+                                                $comment = substr($item->comment,0,80) . " ...";
+                                            } else {
+                                                $comment = $item->comment;
+                                            }
                                         @endphp
-                                        <td class="w-1/12 px-2 py-2 text-xs">{{ $item->team_name }}</td>
-                                        <td class="w-1/12 px-2 py-2 text-xs">{{ $item->competition_number }}</td>
+
                                         <td class="w-1/12 px-2 py-2 text-xs">{{ $formattedDate }}</td>
                                         <td class="w-1/12 px-2 py-2 text-xs">{{ $item->competition_time}}</td>
                                         <td class="w-1/12 px-2 py-2 text-xs">{{ $item->home_team }}</td>
@@ -50,6 +53,7 @@
                                                 <span class="badge bg-primary text-xs">{{ $singleMember->firstname }} {{ $singleMember->lastname }}</span>
                                             @endforeach
                                         </td>
+                                        <td class="w-1/12 px-2 py-2 text-xs">{{ $comment }}</td>                                        
                                         <td class="px-2 py-2 flex justify-end">
                                             @can('update', $item)
                                             <x-jet-button wire:click="updateShowModal({{ $item->id }})">
@@ -90,11 +94,13 @@
 
         <x-slot name="content">
             <div class="grid grid-cols-2 gap-2">
+                @csrf
                 <div class="mt-4 mx-4 justify-items-center">
                     <x-jet-label for="competition" value="{{ __('Competition Organizer') }}" />
                     <select wire:model="competition" wire:ignore class="text-xs">
+                        <option value="undefined">{{ __('None') }}</option>
                         @foreach($competition_names as $singleCompetition)
-                            <option value="{{ $singleCompetition->name }}" {{ $singleCompetition->name == $competition ? "selected" : ""  }}>
+                            <option value="{{ $singleCompetition->name }}">
                                 {{ $singleCompetition->name }}
                             </option>
                         @endforeach
@@ -103,10 +109,12 @@
                 </div>
                 <div class="mt-4 mx-4 justify-items-center">        
                     <x-jet-label for="team_name" value="{{ __('Team Name') }}" />
+
                     <select wire:model="team_name" wire:ignore class="text-xs">
+                        <option value="">{{ __('Team Name is required') }}</option>                        
                         @foreach($team_names as $singleTeam)
                             <h1>{{ $singleTeam->name == $team_name ? "selected" : "" }}</h1>
-                            <option value="{{ $singleTeam->name }}" {{ $singleTeam->name == $team_name ? "selected" : "" }}>
+                            <option value="{{ $singleTeam->name }}">
                                 {{ $singleTeam->name }}
                             </option>
                         @endforeach
@@ -153,6 +161,11 @@
                         @endforeach
                     </select>
                     @error('participants') <span class="error">{{ $message }}</span> @enderror
+                </div>
+                <div class="mt-4 mx-4 justify-items-center">
+                    <x-jet-label for="comment" value="{{ __('Comment') }}" />
+                    <textarea wire:model="comment" id="comment" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full resize-y"></textarea>
+                    @error('comment') <span class="error">{{ $message }}</span> @enderror
                 </div>           
             </div>            
         </x-slot>

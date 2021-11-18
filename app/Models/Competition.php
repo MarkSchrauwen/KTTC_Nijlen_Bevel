@@ -14,7 +14,7 @@ class Competition extends Model
     protected $table = "competitions";
 
     protected $fillable = ["team_name","competition","season","competition_number",
-        "competition_date","competition_time","home_team","visitor_team"];
+        "competition_date","competition_time","home_team","visitor_team","comment"];
 
     protected $dates = ["created_at","updated_at","competition_date"];
 
