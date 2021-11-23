@@ -33,7 +33,7 @@ Route::group(["middleware" => ['auth:sanctum','verified']], function() {
         Route::get('/competition-teams', function () {return view('admin.competition-teams');})->name('competition-teams');
         Route::get('/competitions', function () {return view('admin.competitions');})->name('competitions');
         Route::get('/calendars', function () {return view('admin.calendars');})->name('calendars');
-        Route::get('/notifications', [App\Http\Controllers\admin\NotificationsController::class, 'index'])->name('notifications');
+        Route::get('/notifications/{array_notifications?}', [App\Http\Controllers\admin\NotificationsController::class, 'index'])->name('notifications');
         Route::post('/mark-notification', [App\Http\Controllers\admin\NotificationsController::class, 'markNotification'])->name('markNotification');
     });
 // Hereunder we specify routes accessible only by members

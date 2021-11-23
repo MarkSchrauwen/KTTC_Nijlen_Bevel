@@ -42,7 +42,7 @@ class UpdateCompetitionNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            "admin" => $this->user,
+            "admin" => $this->user->firstname . " " . $this->user->lastname,
             "competitionId" => $this->competitionId,
         ];
     }

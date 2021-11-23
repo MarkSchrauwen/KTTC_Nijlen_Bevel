@@ -33,19 +33,40 @@
         </div>
 
         <div class="ml-12">
-            <div class="mt-2 text-sm text-gray-500">
-                Ben je ploegkapitein gelieve dan de ploegensamenstelling voor de te spelen competities up-to-date te houden. Op die manier kunnen alle teamleden steeds de meest recente ploegensamenstelling raadplegen. Ook geeft het de gelegenheid aan het bestuur om met de meest acurate info en op de meeste efficiënte manier nog leden te contacteren in noodgevallen.
+            <div class="flex flex-row flex-1 mt-2 text-sm text-gray-500">
+                <div class="mr-2">                
+                    <u>{{ __('Next Competitions') }}</u> :
+                    <br/> 
+                    @forelse($next3Competitions as $competition)
+                        <div class="text-xs">
+                            {{ $competition->competition_date->format('D d-m-y') }}   {{ $competition->home_team }} - {{ $competition->visitor_team }}
+                        </div>                
+                    @empty
+                        {{ __('No Competitions') }}
+                    @endforelse
+                </div>
+                <div class="ml-2">
+                    <u>{{ __('Your next Competitions') }}</u> :
+                     <br/>
+                    @forelse($ownNext3Competitions as $competition)
+                        <div class="text-xs">
+                            {{ $competition->competition_date->format('D d-m-y') }}   {{ $competition->home_team }} - {{ $competition->visitor_team }}
+                        </div>                    
+                    @empty
+                        {{ __('No Competitions') }}
+                    @endforelse                    
+                </div>
             </div>
-
-            <a href="{{ route('member.competitions') }}">
-                <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
-                        <div>Opvolging voor de wedstrijden</div>
-
-                        <div class="ml-1 text-indigo-500">
+            <br/>
+            <div class="text-sm">
+                {{ __('For more details')  }} ...
+                    <a href="{{ route('member.competitions') }}" class="mt-3 flex items-center font-semibold text-indigo-700">
+                        {{ __('Consult Competitions') }}
+                        <div class="ml-1 text-indigo-700">
                             <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                         </div>
-                </div>
-            </a>
+                    </a>            
+            </div>
         </div>
     </div>
 

@@ -13,96 +13,147 @@
                         {{ __('Notifications') }}
                     </div>
                     <div class="card-body">
-                        @forelse($notifications as $notification)
+                        @forelse($notifications as $item)
                             {{-- Switch for all the different notification cases --}}
 
-                            @switch($notification->type)
+                            @switch($item->type)
                                 @case('App\Notifications\NewUserNotification')
-                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $notification->id }}">
+                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
                                         {{ __('User') }} 
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['name'] }}</span>
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['admin'] }}</span>
                                         {{ __('Registered with email') }} 
-                                        <span class="text-indigo-700 font-bold">{{  $notification->data['email']  }}</span>
-                                        *** {{ $notification->created_at }}
+                                        <span class="text-indigo-700 font-bold">{{  $item->data['email']  }}</span>
+                                        *** {{ $item->created_at }}
                                         <a href="#" class="text-blue-500 float-right">
                                             {{ __('Mark as read') }}
                                         </a>
                                     </div>
                                     @break
                                 @case('App\Notifications\CreateMemberNotification')
-                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $notification->id }}">
+                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
                                         {{ __('Administrator') }} 
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['admin'] }}</span>
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['admin'] }}</span>
                                         {{ __('Created a new Member') }} 
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['member']  }}</span>
-                                        @if(!empty($notification->data['connectedUser']))
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['member']  }}</span>
+                                        @if(!empty($item->data['connectedUser']))
                                             {{ __('linked to User') }} 
-                                            <span class="text-indigo-700 font-bold">{{ $notification->data['connectedUser'] }}</span>
+                                            <span class="text-indigo-700 font-bold">{{ $item->data['connectedUser'] }}</span>
                                         @endif
-                                        *** {{ $notification->created_at }}
+                                        *** {{ $item->created_at }}
                                         <a href="#" class="text-blue-500 float-right">
                                             {{ __('Mark as read') }}
                                         </a>
                                     </div>
                                     @break
                                 @case('App\Notifications\UpdateMemberNotification')
-                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $notification->id }}">
+                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
                                         {{ __('Administrator') }} 
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['admin'] }}</span>
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['admin'] }}</span>
                                         {{ __('Updated Member') }} 
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['member']  }}</span>
-                                        @if(!empty($notification->data['connectedUser']))
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['member']  }}</span>
+                                        @if(!empty($item->data['connectedUser']))
                                             {{ __('linked to User') }} 
-                                            <span class="text-indigo-700 font-bold">{{ $notification->data['connectedUser'] }}</span>
+                                            <span class="text-indigo-700 font-bold">{{ $item->data['connectedUser'] }}</span>
                                         @endif
-                                        *** {{ $notification->created_at }}
+                                        *** {{ $item->created_at }}
                                         <a href="#" class="text-blue-500 float-right">
                                             {{ __('Mark as read') }}
                                         </a>
                                     </div>
                                     @break
                                 @case('App\Notifications\DeleteMemberNotification')
-                                    <div class="alert alert-danger text-sm mark-as-read" role="alert" data-id="{{ $notification->id }}">
+                                    <div class="alert alert-danger text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
                                         {{ __('Administrator') }} 
-                                        <span class="text-red-600 font-bold">{{ $notification->data['admin'] }}</span>
+                                        <span class="text-red-600 font-bold">{{ $item->data['admin'] }}</span>
                                         {{ __('Deleted Member') }} 
-                                        <span class="text-red-600 font-bold">{{ $notification->data['member']  }}</span>
-                                        *** {{ $notification->created_at }}
+                                        <span class="text-red-600 font-bold">{{ $item->data['member']  }}</span>
+                                        *** {{ $item->created_at }}
                                         <a href="#" class="text-blue-500 float-right">
                                             {{ __('Mark as read') }}
                                         </a>
                                     </div>
                                     @break
                                 @case('App\Notifications\UpdateUserNotification')
-                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $notification->id }}">
+                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
                                         {{ __('Administrator') }} 
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['admin'] }}</span>
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['admin'] }}</span>
                                         {{ __('Updated User') }} 
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['concernedUser']  }}</span>
-                                        @if(!empty($notification->data['connectedMember']))
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['concernedUser']  }}</span>
+                                        @if(!empty($item->data['connectedMember']))
                                             {{ __('linked to Member') }} 
-                                            <span class="text-indigo-700 font-bold">{{ $notification->data['connectedMember'] }}</span>
+                                            <span class="text-indigo-700 font-bold">{{ $item->data['connectedMember'] }}</span>
                                         @endif
                                          {{ __('with Role') }}
-                                        <span class="text-indigo-700 font-bold">{{ $notification->data['role'] }}</span>
-                                        *** {{ $notification->created_at }}
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['role'] }}</span>
+                                        *** {{ $item->created_at }}
                                         <a href="#" class="text-blue-500 float-right">
                                             {{ __('Mark as read') }}
                                         </a>
                                     </div>
                                     @break
                                 @case('App\Notifications\DeleteUserNotification')
-                                    <div class="alert alert-danger text-sm mark-as-read" role="alert" data-id="{{ $notification->id }}">
+                                    <div class="alert alert-danger text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
                                         {{ __('Administrator') }} 
-                                        <span class="text-red-600 font-bold">{{ $notification->data['admin'] }}</span>
+                                        <span class="text-red-600 font-bold">{{ $item->data['admin'] }}</span>
                                         {{ __('Deleted User') }} 
-                                        <span class="text-red-600 font-bold">{{ $notification->data['concernedUser']  }}</span>
-                                        *** {{ $notification->created_at }}
+                                        <span class="text-red-600 font-bold">{{ $item->data['concernedUser']  }}</span>
+                                        *** {{ $item->created_at }}
                                         <a href="#" class="text-blue-500 float-right">
                                             {{ __('Mark as read') }}
                                         </a>
                                     </div>
                                     @break
+                                @case('App\Notifications\CreateCompetitionNotification')
+                                @php
+                                    $competition = App\Models\Competition::find($item->data['competitionId']);
+                                @endphp
+                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
+                                        {{ __('Member') }} 
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['admin'] }}</span>
+                                        {{ __('Created Competition') }} 
+                                        <span class="text-indigo-700 font-bold">
+                                            {{ $competition->competition_date->format('D d-m-y') }} {{ $competition->home_team }} - {{ $competition->visitor_team }}
+                                        </span>
+                                        *** {{ $notification->created_at }}
+                                        <a href="#" class="text-blue-500 float-right">
+                                            {{ __('Mark as read') }}
+                                        </a>
+                                    </div>
+                                @break
+                                @case('App\Notifications\UpdateCompetitionNotification')
+                                    @php
+                                        $competition = App\Models\Competition::find($item->data['competitionId']);
+                                    @endphp
+                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
+                                        {{ __('Member') }} 
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['admin'] }}</span>
+                                        {{ __('Updated Competition') }} 
+                                        <span class="text-indigo-700 font-bold">
+                                            {{ $competition->competition_date->format('D d-m-y') }} {{ $competition->home_team }} - {{ $competition->visitor_team }}
+                                        </span>
+                                        *** {{ $item->created_at }}
+                                        <a href="#" class="text-blue-500 float-right">
+                                            {{ __('Mark as read') }}
+                                        </a>
+                                    </div>
+                                @break
+                                @case('App\Notifications\DeleteCompetitionNotification')
+                                    @php
+                                        $competition = App\Models\Competition::find($item->data['competitionId']);
+                                    @endphp
+                                    <div class="alert alert-success text-sm mark-as-read" role="alert" data-id="{{ $item->id }}">
+                                        {{ __('Member') }} 
+                                        <span class="text-indigo-700 font-bold">{{ $item->data['admin'] }}</span>
+                                        {{ __('Deleted Competition') }} 
+                                        <span class="text-indigo-700 font-bold">
+                                            {{ $competition->competition_date->format('D d-m-y') }} {{ $competition->home_team }} - {{ $competition->visitor_team }}
+                                        </span>
+                                        *** {{ $item->created_at }}
+                                        <a href="#" class="text-blue-500 float-right">
+                                            {{ __('Mark as read') }}
+                                        </a>
+                                    </div>
+                                @break
                             @endswitch
 
                             @if($loop->last)

@@ -8,10 +8,14 @@ use App\Http\Controllers\Controller;
 class NotificationsController extends Controller
 {
 
-    public function index() {
-            $notifications = auth()->user()->unreadNotifications;
-            return view('admin.notifications',['notifications' => $notifications]);
+    public function index(Request $request, $array_notifications = []) {
+            $selectedNotifications = json_decode($array_notifications);
+            $notifications = auth()->user()->unreadNotifications
+                ->whereIn('id',$selectedNotifications);
+            return view('admin.notifications')->with(compact('notifications'));
     }
+
+
 
     public function markNotification(Request $request)
     {
