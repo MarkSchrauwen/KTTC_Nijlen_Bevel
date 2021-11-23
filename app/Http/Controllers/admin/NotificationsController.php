@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 class NotificationsController extends Controller
 {
 
-    public function index(Request $request, $array_notifications = []) {
+    public function index(Request $request, $array_notifications = null) {
             $selectedNotifications = json_decode($array_notifications);
             $notifications = auth()->user()->unreadNotifications
                 ->whereIn('id',$selectedNotifications);
