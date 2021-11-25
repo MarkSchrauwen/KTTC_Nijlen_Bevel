@@ -24,16 +24,15 @@
                             array_push($array_notifications,$item->id);
                         }
                     @endphp
+                    {{ __('Notifications') }}                    
                     <a href="{{ route('admin.notifications', json_encode($array_notifications)) }}">
-                        {{ __('Notifications') }}
+
                         <span class="absolute ml-1 -top-2 -right-5 px-1 py-1 text-xs bg-red-500 text-red-50 rounded">
                             {{ $numberAdminNotifications }}
                         </span>                                         
                     </a>
                 @else
-                    <a href="{{ route('admin.notifications') }}">
-                        {{ __('Notifications') }}                                         
-                    </a>
+                    {{ __('Notifications') }}                
                 @endif
             </div>
         </div>
@@ -42,14 +41,25 @@
             <div class="mt-2 text-sm text-gray-500">
                 {{ __('If indicated there are Notifications to be administered throught the link.') }}
             </div>
-            <a href="{{ route('admin.notifications') }}">
-                <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
-                        <div>{{ __('Notification Management') }}</div>
-                        <div class="ml-1 text-indigo-500">
-                            <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        </div>
-                </div>
-            </a>
+            @if($numberAdminNotifications != null)
+                <a href="{{ route('admin.notifications', json_encode($array_notifications)) }}">
+                    <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
+                            <div>{{ __('Notification Management') }}</div>
+                            <div class="ml-1 text-indigo-500">
+                                <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            </div>
+                    </div>
+                </a>
+            @else
+                <a href="{{ route('admin.notifications'), null }}">
+                    <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
+                            <div>{{ __('Notification Management') }}</div>
+                            <div class="ml-1 text-indigo-500">
+                                <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            </div>
+                    </div>
+                </a>
+            @endif
         </div>
     </div>
 
@@ -64,16 +74,15 @@
                         array_push($array_notifications,$item->id);
                     }
                 @endphp
+                    {{ __('Competitions') }}                
                     <a href="{{ route('admin.notifications', ["array_notifications" => json_encode($array_notifications)]) }}">
-                        {{ __('Competitions') }}
+
                         <span class="absolute ml-1 -top-2 -right-5 px-1 py-1 text-xs bg-red-500 text-red-50 rounded">
                             {{ $numberCompetitionNotifications }}
                         </span>                                         
                     </a>
                 @else
-                    <a href="{{ route('admin.notifications') }}">
-                        {{ __('Competitions') }}                                         
-                    </a>
+                    {{ __('Competitions') }}                
                 @endif
             </div>
         </div>

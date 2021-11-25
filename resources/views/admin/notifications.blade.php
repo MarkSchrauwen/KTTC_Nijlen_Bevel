@@ -157,7 +157,7 @@
                             @endswitch
 
                             @if($loop->last)
-                                <a href="#" class="text-blue-500" id="mark-all">
+                                <a href="#" class="text-blue-500" id="mark-all" data-notifications="{{ $notifications }}">
                                     {{ __('Mark all as read') }}
                                 </a>
                             @endif
@@ -173,24 +173,25 @@
 
 @if(auth()->user()->isAdmin)
     <script>
-    function sendMarkRequest(id = null) {
+    function sendMarkRequest(id = null, notifications = null) {
         return $.ajax("{{ route('admin.markNotification') }}", {
             method: 'POST',
             data: {
                 "_token": "{{ csrf_token() }}",
                 "id": id,
+                "notifications": notifications,
             }
         });
     }
     $(function() {
         $('.mark-as-read').click(function() {
-            let request = sendMarkRequest($(this).data('id'));
+            let request = sendMarkRequest($(this).data('id') );
             request.done(() => {
                 $(this).remove();
             });
         });
         $('#mark-all').click(function() {
-            let request = sendMarkRequest();
+            let request = sendMarkRequest(null,$(this).data('notifications'));
             request.done(() => {
                 $('div.alert').remove();
             })

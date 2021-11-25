@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Member;
 
+use App\Mail\CompetitionsMail;
 use App\Models\Competition;
 use App\Models\CompetitionTeam;
 use App\Models\CompetitionOrganisation;
@@ -13,6 +14,8 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Notification;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -40,6 +43,7 @@ class Competitions extends Component
     public $visitor_team;
     public $comment;
     public $participants = [];
+    public $sendMail = true;
 
     /**
     * Other public properties
@@ -82,6 +86,7 @@ class Competitions extends Component
         $this->seasonSearch = "";
         $this->homeSearch = "";
         $this->visitorSearch = "";
+        $this->startDateSearch = Carbon::now()->startOfDay();
         $this->participants = [];       
     }
 
@@ -287,6 +292,18 @@ class Competitions extends Component
         Competition::find($this->modelId)->members()->sync($this->participants);
         $admins = User::where('role_id', Role::isSiteAdmin)->get();
         Notification::send($admins, new UpdateCompetitionNotification(auth()->user(), $this->modelId));
+
+        // send Email to participants if requested and if there are participants
+        $competition = Competition::find($this->modelId);
+        if ($competition->members != null AND $this->sendMail == true) {
+            $competitionArray = [];
+            array_push($competitionArray, $competition);      
+            foreach($competition->members as $member) {
+                if($member->email != null) {
+                    Mail::to($member->email)->send(new CompetitionsMail($competitionArray,$member->id));                    
+                }
+            }            
+        }
         $this->modalFormVisible = false;
     }
 

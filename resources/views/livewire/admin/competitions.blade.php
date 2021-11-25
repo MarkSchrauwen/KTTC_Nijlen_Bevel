@@ -166,10 +166,14 @@
                     <x-jet-label for="comment" value="{{ __('Comment') }}" />
                     <textarea wire:model="comment" id="comment" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full resize-y"></textarea>
                     @error('comment') <span class="error">{{ $message }}</span> @enderror
-                </div>           
-            </div>            
+                </div>          
+            </div>
+                <div class="mt-4 mx-4 justify-items-center">
+                    <x-jet-label for="confirmationMail" value="{{ __('2 Days prior a reminder is sent to participants') }}" />
+                    <input type="checkbox" wire:model="sendMail" class="form-checkbox" checked />
+                    <span class="text-xs">{{ __('Send another mail to participants') }} ?</span>
+                </div>                        
         </x-slot>
-
         <x-slot name="footer">
             <x-jet-secondary-button wire:click="$toggle('modalFormVisible')" wire:loading.attr="disabled">
                 {{ __('Nevermind') }}
